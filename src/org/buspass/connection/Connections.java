@@ -1,6 +1,5 @@
 package org.buspass.connection;
 
-
 import java.sql.Connection; 
 import java.sql.DriverManager; 
 import java.sql.ResultSet; 
@@ -76,7 +75,7 @@ public class Connections
 	//* * @author oohprava
 	// for executing data manipulation queries
 	
-	public static boolean sendStatement ( Connection dbcon, String query) 
+	public static boolean sendStatement (String query) 
 	{	
 		Statement statement;
 		boolean flag = false;

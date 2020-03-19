@@ -3,6 +3,7 @@ package org.buspass.request;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
@@ -12,6 +13,7 @@ import org.buspass.connection.*;
  * @author missandh
  * Requests by bus users for altering bus pass status or to request admin to add new route or 
  * modify existing routes or to provide any feedback to the admin.
+ * 
  * Methods:
  * 
  * requestAlterBusPass:  For bus user request modification on the bus pass status
@@ -33,6 +35,10 @@ import org.buspass.connection.*;
  * 
  */
 public class Request {
+	
+	private String alterTable = "buspassalterrequest";
+	private String alterRouteTable = "routerequest";
+	private String feedbackTable = "feedback";
 
 	public void requestAlterBusPass (String reqtype, int userid, Date dateofrequest) {
 		
@@ -45,47 +51,22 @@ public class Request {
 		 * breqstatus char(30)
 		 */
 		
-		int result = -1;
-		Connection dbcon = Connections.makeConnection();
+		
 		String reqstatus = "New";
-		String alterquery = "INSERT INTO buspassalterrequest VALUES(default,?,?,?,?)" ;
-		
-		try {
-			
-			PreparedStatement pst = dbcon.prepareStatement(alterquery);
-			pst.setString(2, reqtype);
-			pst.setInt(3, userid);
-			pst.setDate(4, dateofrequest);
-			pst.setString(5, reqstatus);
-			result = pst.executeUpdate();
-			
-			if (result!= -1) {
-				System.out.println("Successfully submitted a request to " + reqtype + " the bus pass");
-			}
-		} 
-			
-		catch (SQLException sqlex) {
-			sqlex.printStackTrace();
-		}
-		catch(Exception e)
-		{ 
-			System.out.println(e);
-		}
+		String alterquery = "INSERT INTO "+alterTable+" VALUES(default,"+reqtype+ ","+ userid+ "," + dateofrequest+ "," +reqstatus+ ")";
 
-		Connections.closeConnection();
-		
+		if( Connections.sendStatement(alterquery))
+			System.out.println("Successfully submitted a request to " + reqtype + " the bus pass. Please note an administrator will need to validate your request.");		
 	}
-	
-	
 	
 	public void validateBusPassRequest()
 	{
 		ResultSet result;
 		int breqid;
-		String breqtype;
+		String breqtype = new String();
 		int userid;
 		Date dateofrequest;
-		String reqstatus;
+		String reqstatus = new String();
 		
 		Connection dbcon = Connections.makeConnection();
 		String selectquery = "select * from buspassalterrequest where reqstatus = New" ;
@@ -104,7 +85,7 @@ public class Request {
 				reqstatus = result.getString(5);
 			}
 			
-				System.out.println("Successfully updated status of the request " + breqtype + " to " + );
+				System.out.println("Successfully updated status of the request " + breqtype + " to " + reqstatus );
 		} 
 			
 		catch (SQLException sqlex) {
@@ -117,5 +98,14 @@ public class Request {
 
 		Connections.closeConnection();
 
+	}
+	
+	public ArrayList<ResultSet> viewBusPassRequests() 
+	{
+		Connection dbcon = Connections.makeConnection(); // make connection
+		String query= "select * from";
+		ArrayList<ResultSet> reqresults = new ArrayList<ResultSet>();
+		ResultSet rset = Connections.sendQuery(dbcon, query);
+		return reqresults;
 	}
 }
