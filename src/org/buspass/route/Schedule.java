@@ -120,7 +120,6 @@ public class Schedule {
                         ", Route ID: " + routeid + ", Scheduled Time: " + scheduletime);
 			}
 		}
-		
 		catch(Exception e)
 		{
 			e.printStackTrace();
