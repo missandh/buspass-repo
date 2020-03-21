@@ -5,6 +5,8 @@ package org.buspass.route;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 import org.buspass.connection.Connections;
@@ -40,7 +42,7 @@ public class Schedule {
 	
 	public void addSchedule(int busid, int routeid, String bustime)
 	{
-		String squery = "INSERT INTO " + table + " VALUES ( DEFAULT " + busid + ", "+ routeid + ", \'" + bustime +"\'" ; 
+		String squery = "INSERT INTO " + table + " VALUES ( DEFAULT, " + busid + ", "+ routeid + ", \'" + bustime +"\';" ; 
 
 		if( Connections.sendStatement(squery))
 			System.out.println("Successfully added the schedule for the bus " + busid + " into the schedule table");
@@ -48,7 +50,7 @@ public class Schedule {
 	
 	public void modifySchedule (int scheduleid, String bustime)
 	{
-		String squery = "UPDATE " + table + " SET scheduletime= \'" + bustime + "\' WHERE scheduleid= " +scheduleid;
+		String squery = "UPDATE " + table + " SET scheduletime= \'" + bustime + "\' WHERE scheduleid= " +scheduleid+";";
 
 		if( Connections.sendStatement(squery))
 			System.out.println("Successfully modified the schedule for schedule id " + scheduleid + " in the schedule table");
@@ -58,7 +60,7 @@ public class Schedule {
 	public void removeSchedule(int scheduleid)
 	{
 			
-		String squery = "DELETE from "+ table + " WHERE scheduleid= " + scheduleid;
+		String squery = "DELETE from "+ table + " WHERE scheduleid= " + scheduleid+";";
 			
 		if( Connections.sendStatement(squery))
 			System.out.println("Successfully removed the entry for the schedule id " + scheduleid +" from the schedule table");
@@ -66,7 +68,7 @@ public class Schedule {
 		
 	public void viewSchedule(int busid)
 	{
-		String squery = "SELECT * FROM "+ table + "WHERE busid= " + busid;
+		String squery = "SELECT * FROM "+ table + "WHERE busid= " + busid+";";
 		ResultSet rset = null;
 		Connection dbcon = Connections.makeConnection();
 
@@ -96,7 +98,7 @@ public class Schedule {
 	
 	public void viewRouteSchedule(int routeid)
 	{
-		String squery = "SELECT * FROM "+ table + "WHERE routeid= " + routeid;
+		String squery = "SELECT * FROM "+ table + "WHERE routeid= " + routeid+";";
 		ResultSet rset = null;
 		ArrayList<String> cnames = new ArrayList<String>();
 		ArrayList<String> values = new ArrayList<String>();
@@ -124,5 +126,5 @@ public class Schedule {
 		{
 			e.printStackTrace();
 		}
-	}
+	}	
 }

@@ -101,13 +101,14 @@ public class Connections
 		return flag;
 	}
 	
+	
 	/* * @author missandh
 	 * 
 	 * For batch processing of update/insert/delete queries
 	 * Parameters: Array of query strings
 	 * Returns array list of integer values
 	 * 
-	* */ 
+ 
 	
 	public static ArrayList<Integer> processBatchUpdates ( Connection dbcon, String [] query) 
 	{	
@@ -139,4 +140,5 @@ public class Connections
        
 		return batchresult;
 	}
+		* */
 }

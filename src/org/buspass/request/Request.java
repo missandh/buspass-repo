@@ -99,13 +99,5 @@ public class Request {
 		Connections.closeConnection();
 
 	}
-	
-	public ArrayList<ResultSet> viewBusPassRequests() 
-	{
-		Connection dbcon = Connections.makeConnection(); // make connection
-		String query= "select * from";
-		ArrayList<ResultSet> reqresults = new ArrayList<ResultSet>();
-		ResultSet rset = Connections.sendQuery(dbcon, query);
-		return reqresults;
-	}
+
 }
