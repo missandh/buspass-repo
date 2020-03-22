@@ -17,6 +17,13 @@ import org.buspass.route.Route;
  * 
  * Methods:
  * 
+ * getBusPassStatus(int userid) : Get current bus pass status for a user
+ * requestCancelBusPass(int userid): Cancel bus pass for a user
+ * requestSuspendBusPass(int userid): Suspend bus pass for a user
+ * requestReactivateBusPass (int userid, int routeid, int scheduleid): reactivate buspass for a user
+ * 
+ * 
+ * Old: 
  * requestAlterBusPass:  For bus user request modification on the bus pass status
  * Takes 3 parameters type of request - String, 
  * userid - int, date of request - pass todays date - Date
@@ -35,17 +42,15 @@ import org.buspass.route.Route;
  * validateRouteModifyRequests() : For Admin to validate (approve/reject) route modification requests.
  * 
  */
+
 public class Request {
-	
-	private String alterTable = "buspassalterrequest";
-	private String alterRouteTable = "routerequest";
 
 	/*
 	 * Request to cancel, suspend, reactivate the bus pass by bus user
 	 * The cancel and suspend request will be auto approved without any checks
 	 * The reactivate request will depend on total capacity available on the route he wants
 	 */
-	private String getBusPassStatus(int userid)
+	public String getBusPassStatus(int userid)
 	{
 		String status="";
 		ResultSet rset;
