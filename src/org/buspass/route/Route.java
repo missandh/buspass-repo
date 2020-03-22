@@ -17,7 +17,10 @@ import org.buspass.connection.Connections;
  *
  * getAllRoutes(): To print the route table and return the array lists of Route IDs
  * 
- * getRouteAllRoutesWithStops(): To print and return all the routes along with their stop details
+ * getStopsForRoute(int routeid): To print and return all the stops for a route
+ * 									Returns ArrayList of Stop objects
+ * 
+ * viewAllRoutesWithStops(): To print and return all the routes along with their stop details
  * 
  * getAvailabilityInRoute(int routeid) : To print available seats in this route. 
  * Difference of (sum of capacity of each bus on a route) - total active bus passes in this route
@@ -29,6 +32,7 @@ import org.buspass.connection.Connections;
  * 
  * 
  */
+
 public class Route {
 	
 	String table = "route";
@@ -147,6 +151,7 @@ public class Route {
 		{
 			e.printStackTrace();
 		}
+		Connections.closeConnection();
 		return rids;
 	}
 	
@@ -181,47 +186,38 @@ public class Route {
                 //add to the allstops arraylist
                 allstops.add(nextstop);
 			}
-			System.out.println();
-			for (Stop eachstop : allstops)
+			
+			int totalstops = allstops.size();
+			
+			for(int i=0; i<totalstops; i++)
 			{
-				System.out.print( eachstop.getStopname() + " -----> " );
+				if(i!=totalstops-1)
+					System.out.print(allstops.get(i).getStopname() + " -----> " );
+				else
+					System.out.print(allstops.get(i).getStopname());
 			}
+			
 		}
 		catch (SQLException e)
 		{
 			e.printStackTrace();
 		}
+		Connections.closeConnection();
 		return allstops;
 	}
 	
-	public void getRouteAllRoutesWithStops() 
+	public void viewAllRoutesWithStops() 
 	{
+    	//View all routes and cost in route table
 		ArrayList<Integer> rids = new ArrayList<Integer>();
-		//Prepare the query string
-		String squery = "SELECT * FROM  ROUTE"+ table +";";
-		ResultSet rset = null;
-		
-		//Connect to the database
-		Connection dbcon = Connections.makeConnection();
-
-		try 
-		{
-			rset = Connections.sendQuery(dbcon, squery);
-			System.out.println("Here are all the routes with costs");
-			
-			while (rset.next())
-			{	 
-                // Let's fetch the data by column numbers
-                Integer routeid = rset.getInt(1);
-                rids.add(routeid);
-                Integer cost = rset.getInt(2);
-                System.out.println("Route ID: " + routeid + "\t Cost: " + cost);
-			}
-		}
-		catch (SQLException e)
-		{
-			e.printStackTrace();
-		}
+    	Route test = new Route();
+    	rids.addAll(test.getAllRoutes());
+    	
+    	//View all routes and stops
+    	for (Integer eachroute : rids)
+    	{
+    		test.getStopsForRoute(eachroute);
+    	}
 	}
 
 
