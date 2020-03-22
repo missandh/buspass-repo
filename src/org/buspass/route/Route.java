@@ -18,7 +18,7 @@ import org.buspass.connection.Connections;
  * getAllRoutes(): To print the route table and return the array lists of Route IDs
  * 
  * getStopsForRoute(int routeid): To print and return all the stops for a route
- * 									Returns ArrayList of Stop objects
+ * 		Returns ArrayList of Stop objects
  * 
  * viewAllRoutesWithStops(): To print and return all the routes along with their stop details
  * 
