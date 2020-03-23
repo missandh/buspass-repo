@@ -38,7 +38,7 @@ import org.buspass.connection.Connections;
 public class Route {
 	
 	String table = "route";
-	private int route_id;
+	private int routeid;
 	
 
 	/**
@@ -81,7 +81,6 @@ public class Route {
 			this.stopname = stopname;
 		}
 		
-		
 		/**
 		 * @return the stoporder
 		 */
@@ -119,11 +118,68 @@ public class Route {
 		}
 
 		/**
+		 * @param stoporder 
+		 * @param eachstop
+		 */
+		public int addStop(String stopname, int rid, int stoporder) {
+			String stopadd = "inser into " + table + "values = (default, \'" + stopname + "\', " + stoporder + ", "+rid +");";
+			
+			if(Connections.sendStatement(stopadd))
+				setStopid(lastAddedID());
+			return getStopid();
+		}
+
+
+		/**
 		 * @param table the table to set
 		 */
 		
 	}
 	// End of Stop inner class
+	
+	private int lastAddedID()
+	{
+		String squery= "SELECT LAST_INSERT_ID();";
+		ResultSet rset = null;
+		int lid = -1;
+		
+		//Connect to the database
+		Connection dbcon = Connections.makeConnection();
+
+		try 
+		{
+			rset = Connections.sendQuery(dbcon, squery);
+			while(rset.next())
+				lid = rset.getInt(1);
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+		Connections.closeConnection();		
+		return lid;
+	}
+	
+	public void addRoute(int cost, ArrayList<String> stopnames)
+	{
+		Stop newstop = new Stop();
+		// add a new route to the database
+		String routeadd = "inser into " + table + "values = (default, " + cost + ");";
+		int sid;
+		
+		if(Connections.sendStatement(routeadd))
+			setRouteid(lastAddedID());
+			System.out.println("Successfully added route with routeid: " + getRouteid());
+		for (int count =0; count<stopnames.size(); count++)
+		{
+			//call addStop method. assuming stop names are given in order
+			String eachstop = stopnames.get(count);
+			int stoporder = count+1;
+			sid = newstop.addStop(eachstop, getRouteid(),stoporder);
+			if(sid!=-1)
+				System.out.println("Stop added: " + eachstop + "\n The Stop ID for this is: " + sid);
+		}
+	}
 	
 	public ArrayList<Integer> getAllRoutes()
 	{
@@ -156,8 +212,6 @@ public class Route {
 		Connections.closeConnection();
 		return rids;
 	}
-	
-	
 	
 	public ArrayList<Stop> getStopsForRoute(int routeid)
 	{
@@ -222,12 +276,42 @@ public class Route {
     	}
 	}
 
+	public void viewTypeOfVehiclesPerRoute()
+	{
+		//select  s.routeid, scheduletime as "Scheduled Time", bustype, count(s.busid) as "Total buses" from schedule as s, bus group by  s.routeid, s.scheduleid, bustype;;
 
+		String squery = "select s.routeid, scheduletime as \"Scheduled Time\", bustype, count(s.busid) as \"Total buses\" from schedule as s, bus group by  s.routeid, s.scheduleid, bustype;";
+		ResultSet rset = null;
+		
+		//Connect to the database
+		Connection dbcon = Connections.makeConnection();
+
+		try 
+		{
+			rset = Connections.sendQuery(dbcon, squery);
+			System.out.println("\n\nHere are all the routes with bus types and count:  ");
+			
+			while (rset.next())
+			{	 
+                // Let's fetch the data by column numbers
+				
+				System.out.println("Route ID: " + rset.getInt(1));
+				System.out.println("\t Time slot :"+rset.getString(2)+ 
+						"\tBus Type: " + rset.getString(3) + " ("+ rset.getInt(4)+")");
+			}
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+		Connections.closeConnection();
+	}
+	
 	/**
-	 * @return the route_id
+	 * @return the routeid
 	 */
 	public int getRouteid() {
-		return route_id;
+		return routeid;
 	}
 
 
@@ -235,21 +319,26 @@ public class Route {
 	 * @param routeid the routeid to set
 	 */
 	public void setRouteid(int routeid) {
-		this.route_id = routeid;
+		this.routeid = routeid;
 	}
 	
-    public static void main(String args[]) {
-    	
-    	//View all routes and cost in route table
-		ArrayList<Integer> rids = new ArrayList<Integer>();
+    public static void main(String args[]) 
+    {
     	Route test = new Route();
-    	rids.addAll(test.getAllRoutes());
-    	
-    	//View all routes and stops
-    	for (Integer eachroute : rids)
-    	{
-    		test.getStopsForRoute(eachroute);
-    	}
+    	test.viewAllRoutesWithStops();
+    	test.viewTypeOfVehiclesPerRoute();
     }
+
+
+
+	/**
+	 * @param routeid
+	 */
+	public boolean isSeatAvailableOnRoute(int routeid, int scheduleid) {
+		
+		boolean availability = false;
+		return availability;
+		
+	}
     
 }
