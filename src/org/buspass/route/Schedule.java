@@ -70,10 +70,13 @@ public class Schedule {
 	{
 		String squery = "SELECT * FROM "+ table + "WHERE busid= " + busid+";";
 		ResultSet rset = null;
+		
+		//Connect to the database
 		Connection dbcon = Connections.makeConnection();
 
 		try 
 		{
+			//Prepare the query string
 			rset = Connections.sendQuery(dbcon, squery);
 			while (rset.next())
 			{
