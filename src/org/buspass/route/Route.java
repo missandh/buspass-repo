@@ -164,20 +164,22 @@ public class Route {
 	{
 		Stop newstop = new Stop();
 		// add a new route to the database
-		String routeadd = "inser into " + table + "values = (default, " + cost + ");";
+		String routeadd = "insert into " + table + "values = (default, " + cost + ");";
 		int sid;
 		
 		if(Connections.sendStatement(routeadd))
+		{
 			setRouteid(lastAddedID());
 			System.out.println("Successfully added route with routeid: " + getRouteid());
-		for (int count =0; count<stopnames.size(); count++)
-		{
-			//call addStop method. assuming stop names are given in order
-			String eachstop = stopnames.get(count);
-			int stoporder = count+1;
-			sid = newstop.addStop(eachstop, getRouteid(),stoporder);
-			if(sid!=-1)
-				System.out.println("Stop added: " + eachstop + "\n The Stop ID for this is: " + sid);
+			for (int count =0; count<stopnames.size(); count++)
+			{
+				//call addStop method. assuming stop names are given in order
+				String eachstop = stopnames.get(count);
+				int stoporder = count+1;
+				sid = newstop.addStop(eachstop, getRouteid(),stoporder);
+				if(sid!=-1)
+					System.out.println("Stop added: " + eachstop + "\n The Stop ID for this is: " + sid);
+			}
 		}
 	}
 	
@@ -325,6 +327,13 @@ public class Route {
     public static void main(String args[]) 
     {
     	Route test = new Route();
+    	ArrayList<String> stopnames = new ArrayList();
+    	stopnames.add("HYD13");
+    	stopnames.add("Manikonda");
+    	stopnames.add("Gowlidoddi");
+    	stopnames.add("Gopanpally");
+    	stopnames.add("Nallagandla");
+    	test.addRoute(1500, stopnames);
     	test.viewAllRoutesWithStops();
     	test.viewTypeOfVehiclesPerRoute();
     }
