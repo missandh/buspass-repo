@@ -113,5 +113,36 @@ public class User {
     	bususer.updateContactDetails(100, "Gachibowli", 123454310, "lokesh@amazon.com");
     }
 
+    
+/**
+ * User Module
+1.  View all the routes, their stops, type of vehicles, no of vehicles on each route
+						   display all routes (shows routes and stops), QUERY (type and no. of vehicles in each route)						 
+    public void viewAllDetails()
+
+2. Request cancel /suspend bus pass / (reactivate) : directly modify buspass master. (Auto approved)
+requestCancelBusPass()
+requestSuspendBusPass()
+requestReactivateBusPass()
+based on the user handler it will take parameter requesttype
+
+requestAlterBusPass(String reqtype, int userid, int routeid, int scheduleid)
+
+4. feedback 
+giveFeedback()
+
+5. view and update user details.
+updateContactDetails()
+					 
+6. get snapshot of details. get all user related details.		
+viewBuspassSnapshot()
+
+(Tentative)3. Request to change to another route -> check if new route has capacity, and change, else prompt change is not possible. (auto approved)
+ */
+    
+    public void viewAllDetails()
+    {
+    	
+    }
 	
 }
