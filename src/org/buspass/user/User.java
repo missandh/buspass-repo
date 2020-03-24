@@ -6,8 +6,13 @@ package org.buspass.user;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
 import org.buspass.connection.Connections;
+import org.buspass.request.Feedback;
+import org.buspass.request.Request;
+import org.buspass.route.Route;
 
 /**
  * @author missandh
@@ -31,6 +36,27 @@ public class User {
 //	String emailid;
 //	int isAdmin;
 //	
+	
+	Route currentroute = new Route();
+	Request newrequest = new Request();
+	Feedback newfb = new Feedback();
+
+	public int userid;
+
+	/**
+	 * @return the userid
+	 */
+	public int getUserid() {
+		return userid;
+	}
+
+	/**
+	 * @param userid the userid to set
+	 */
+	public void setUserid(int userid) {
+		this.userid = userid;
+	}
+	
 	public void resetPassword (int userid, String passwd)
 	{
 		//Reset password for user
@@ -121,6 +147,8 @@ public class User {
     public void viewAllDetails()
 
 2. Request cancel /suspend bus pass / (reactivate) : directly modify buspass master. (Auto approved)
+requestAlterBusPass() 
+calls under if else any of the 3 methods:
 requestCancelBusPass()
 requestSuspendBusPass()
 requestReactivateBusPass()
@@ -132,7 +160,7 @@ requestAlterBusPass(String reqtype, int userid, int routeid, int scheduleid)
 giveFeedback()
 
 5. view and update user details.
-updateContactDetails()
+updateUserData()
 					 
 6. get snapshot of details. get all user related details.		
 viewBuspassSnapshot()
@@ -142,7 +170,126 @@ viewBuspassSnapshot()
     
     public void viewAllDetails()
     {
-    	
+    	System.out.println("Here are all the routes that currently are served: ");
+    	currentroute.viewAllRoutesWithStops();
+    	currentroute.viewTypeOfVehiclesPerRoute();
     }
 	
+    public void requestAlterBusPass()
+    {
+    	int alter =-1;
+    	boolean validIntegerEntered = false;
+    	int userid=-1;
+    	boolean validUserIDEntered = false;
+
+    	System.out.println("Would you like to : ");
+    	System.out.println("\n 1. Cancel Bus Pass \n 2. Re-activate a cancelled bus pass or \n 3. Suspend Bus Pass");
+    	System.out.println("Enter your choice as 1 or 2 or 3");
+    	System.out.println("ENTER A NUMBER: ");
+    	
+    	Scanner input = new Scanner(System.in);
+
+    	while (!validIntegerEntered) {
+    	    try {
+    	        alter = input.nextInt();
+    	        if (alter == 1 || alter == 2 || alter == 3)
+    	        	validIntegerEntered = true;  // will not get here if nextInt() throws exception
+    	    }
+    	    catch (InputMismatchException e) {
+    	        input.nextLine();            // let the scanner skip over the bad input
+    	        System.out.println("ERROR!!! \nENTER 1, 2 or 3 :");
+    	    }    	
+    	}
+    	
+    	switch (alter)
+    	{
+    		case 1:
+    			System.out.println("Requesting cancellation. Please re-enter your userid for confirmation: ");
+    	    	while (!validUserIDEntered) {
+    	    	    try 
+    	    	    {
+    	    	        userid = input.nextInt();
+    	    	        if(true) // **** add a condition to check with current userid
+    	    	        	validUserIDEntered = true;
+    	    	    }
+    	        	catch (InputMismatchException e) 
+    	    	    {
+    	        	    input.nextLine(); // let the scanner skip over the bad input
+    	        	    System.out.println("ERROR! User ID mismatch. Please retry :");
+    	    	    }
+    	    	}
+    			newrequest.requestCancelBusPass(userid);
+    			
+    		case 2:
+    			System.out.println("Please enter the route id you want to reactivate the bus pass to : ");
+    			int routeid = Integer.parseInt(input.nextLine());
+    			System.out.println("Please enter the scheduled time you want to reactivate the bus pass to: ");
+    			//****add code to get scheduleid from schedule time
+    			int scheduleid = Integer.parseInt(input.nextLine());
+    			newrequest.requestReactivateBusPass(userid, routeid,scheduleid);
+    			
+    		case 3:
+    			System.out.println("Requesting Suspending the bus pass. Please re-enter your userid for confirmation: ");
+    			validUserIDEntered=false;
+    	    	while (!validUserIDEntered) {
+    	    	    try 
+    	    	    {
+    	    	        userid = input.nextInt();
+    	    	        if(true) // **** add a condition to check with current userid
+    	    	        	validUserIDEntered = true;
+    	    	    }
+    	        	catch (InputMismatchException e) 
+    	    	    {
+    	        	    input.nextLine(); // let the scanner skip over the bad input
+    	        	    System.out.println("ERROR! User ID mismatch. Please retry :");
+    	    	    }
+    	    	}
+    	    	newrequest.requestSuspendBusPass(userid);
+		}
+    	input.close();
+    }//End of requestAlterBusPass()
+    
+    public void provideFeedback()
+    {
+    	Scanner input = new Scanner(System.in);
+
+    	System.out.println("Please provide the type of feedback you want to give. Examples: Appreciation, Suggestion, Complain, Other.");
+    	String fbacktype = input.nextLine();
+    	System.out.println("Please enter your feedback text in no more than 100 characters: ");
+    	String fbackdetails = input.nextLine();
+    	newfb.giveFeedback(fbacktype, userid, fbackdetails);
+    }
+    
+    public void updateUserData()
+    {
+    	String address;
+    	int phonenumber = -1;
+    	String emailid;
+    	boolean validchoice = false;
+    	Scanner input = new Scanner(System.in);
+    	
+    	System.out.println("Please enter the following fields to change. Enter current values if you wish to retain the same value: ");
+    	System.out.println("1: Address");
+    	address = input.nextLine();
+    	System.out.println("2: Phone Number. Please enter a numeric 10 digit phone number: ");
+
+    	while (!validchoice) 
+    	{
+    	    try {
+    	        phonenumber = input.nextInt();
+    	        if ((int)Math.floor(Math.log10(phonenumber)) + 1 == 10)
+    	        	validchoice = true;  // will not get here if nextInt() throws exception
+    	    }
+    	    catch (InputMismatchException e) {
+    	        input.nextLine();            // let the scanner skip over the bad input
+    	        System.out.println("ERROR!!! \nENTER a 10 digit number :");
+    	    }
+    	}
+    	System.out.println("3. Email ID: ");
+    		emailid= input.nextLine();
+
+    	this.updateContactDetails(userid, address, phonenumber, emailid);
+    	input.close();
+    }
+    
 }
