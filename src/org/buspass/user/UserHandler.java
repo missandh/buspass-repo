@@ -14,7 +14,7 @@ public class UserHandler
 	{
 		displayUserHeader();
 		displayUserOptions();
-		int choice =getInput(); 	
+		int choice= getInput(); 	
 		executeChoice(choice);
 	}
 	
@@ -32,7 +32,12 @@ public class UserHandler
     			System.out.println("\nEnter your choice:");
     	    	choice = input.nextInt();
     	        if (choice >= 1 || choice <= 5 || choice == 9)
+    	        {
     	        	validchoice = true;  // will not get here if nextInt() throws exception
+    	        	System.out.println("Great choice here we go!");
+    	        }
+    	        else
+    	        	System.out.println("Incorrect Choice");
     	    }
     	    catch (InputMismatchException e) {
     	        input.nextLine();            // let the scanner skip over the bad input
@@ -43,7 +48,7 @@ public class UserHandler
 		input.close();
 		return choice;
 }
-	
+
 	
 	public void displayUserHeader() {
 		System.out.println("\n|----------------|");
@@ -95,10 +100,14 @@ public class UserHandler
 		case 9:
 			break;
 			
-		default:
-			break;
 		}
 		
 	}
+	
+    public static void main(String args[]) 
+    {
+    	UserHandler newu = new UserHandler();
+    	newu.displayUserMenu();
+    }
 	
 }
