@@ -131,13 +131,6 @@ public class User {
 		}
 		Connections.closeConnection();
 	}
-	
-    public static void main(String args[]) {
-    	User bususer = new User();
-    	bususer.viewBuspassSnapshot(100);
-    	bususer.resetPassword(100, "lokesh123");
-    	bususer.updateContactDetails(100, "Gachibowli", 123454310, "lokesh@amazon.com");
-    }
 
     
 /**
@@ -252,12 +245,15 @@ viewBuspassSnapshot()
     public void provideFeedback()
     {
     	Scanner input = new Scanner(System.in);
-
-    	System.out.println("Please provide the type of feedback you want to give. Examples: Appreciation, Suggestion, Complain, Other.");
-    	String fbacktype = input.nextLine();
-    	System.out.println("Please enter your feedback text in no more than 100 characters: ");
-    	String fbackdetails = input.nextLine();
+    	String fbacktype = "", fbackdetails= "";
+    	System.out.print("Please provide the type of feedback you want to give. Examples: Appreciation, Suggestion, Complain, Other");
+    	while(input.hasNextLine())
+    		fbacktype = fbacktype + input.nextLine();
+    	System.out.print("Please enter your feedback text in no more than 100 characters: ");
+    	while(input.hasNextLine())
+    		fbackdetails = fbackdetails + input.nextLine();
     	newfb.giveFeedback(fbacktype, userid, fbackdetails);
+    	input.close();
     }
     
     public void updateUserData()
