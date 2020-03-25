@@ -157,7 +157,7 @@ based on the user handler it will take parameter requesttype
 requestAlterBusPass(String reqtype, int userid, int routeid, int scheduleid)
 
 4. feedback 
-giveFeedback()
+provideFeedback()
 
 5. view and update user details.
 updateUserData()
