@@ -79,7 +79,7 @@ public class UserHandler
 		System.out.println("5. Get Bus Pass Snapshot");
 		System.out.println("6. Logout");
 
-		System.out.println("9. Exit menu");
+		//System.out.println("9. Exit menu");
 	}
 	
 	private void executeChoice(int choice) {

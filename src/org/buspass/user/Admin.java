@@ -217,27 +217,17 @@ public class Admin extends Employee{
 	       
 }
 
-	public void logout()
+	public boolean logout()
 	{
-		Menu exit = new Menu();
-		System.out.println("Thank you for using Amazon Transport System. Signing you out...");
-
-		try
-		{
-			exit.displayMenu();
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
+		System.out.println("Thank you Admin for using Amazon Transport System. Signing you out...");
+		return true;
 	}
 
 	/**
 	 * @param userid
 	 */
 	public void setUserid(int userid) {
-		// TODO Auto-generated method stub
-		
+		this.userid = userid;		
 	}
 	
 }

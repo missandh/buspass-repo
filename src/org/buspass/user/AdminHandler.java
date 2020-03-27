@@ -58,7 +58,8 @@ public class AdminHandler
 		System.out.println("5. Change bus type on a route ");
 		System.out.println("6. View number of vehicles in each type");
 		System.out.println("7. Change route of a bus");
-		System.out.println("9. Exit menu");
+		System.out.println("8. Logout");
+		//System.out.println("9. Exit");
 	}
 	
 	private void executeChoice(int choice) {
@@ -94,14 +95,13 @@ public class AdminHandler
 			admin.changeRouteOfBus();
 			break;
 			
-		case 9:
-			admin.logout();
-			loggedout = true;
+		case 8:
+			loggedout= admin.logout();
 			break;
+			
 		default:
 			break;
 		}
-		loggedout = true;
 	}
 	
 }

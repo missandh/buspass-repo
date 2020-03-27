@@ -375,7 +375,7 @@ viewBuspassSnapshot()
     	viewUserData();
     	System.out.println("Please enter the following fields to change. Enter current values if you wish to retain the same value: ");
     	System.out.println("1: Address: ");
-    	if(Menu.userChoice.hasNext())
+    	if(Menu.userChoice.nextLine()!=null)
     		address = Menu.userChoice.nextLine();
     	System.out.println("2: Phone Number. Please enter a numeric 10 digit phone number: ");
     	while (!validchoice) 
