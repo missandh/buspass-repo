@@ -14,8 +14,6 @@ public class Menu {
 
 	public void displayMenu() throws Exception // throws Exception
 	{
-		// printWelcome();
-		// while(!exit) {
 		printMainMenu();
 		int choice = getInput();
 		try
@@ -33,7 +31,7 @@ public class Menu {
 
 	/* Private Functions to cut down scope only to Menu class */
 
-	public void printWelcome() {
+	private void printWelcome() {
 		System.out.println("+----------------------------------------------------+");
 		System.out.println("|         Welcome to Amazon Transport System         |");
 		System.out.println("+----------------------------------------------------+");
@@ -111,7 +109,7 @@ public class Menu {
 			case 9:
 				exit = true;
 				System.out.println("Thank you for using Amazon Transport System. Signing you out.");
-	
+				break;
 			default:
 				System.out.println("Unable to make selection, Please try again");
 				

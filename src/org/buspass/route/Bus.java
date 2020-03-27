@@ -32,7 +32,6 @@ public class Bus
 //method to see the count of vehicles of each type based on routeId
 public void viewTypeCount(int routeid) {
 	//TODO Print specific route
-	System.out.println("aaagye");
 	Connection con = Connections.makeConnection();
 	String query = "select count(busid) as Count, bustype from bus where routeid= "+ routeid +" group by bustype;";
 	try {
@@ -123,14 +122,13 @@ public  int  getapplicationdetails(int id) {
     return routeid;
 }
 
-//Yet to be updated
-public  void validateBusPassApplication(int routeId,int applicationId) {
-    String query = "update buspassapplication set approvalstatus = 'Approved' where applicationid = "+applicationId;
+//metod to vlidate buspass
+public  void validateBusPassApplication(int routeid,int applicationid) {
+    String query = "update buspassapplication set approvalstatus = 'Approved' where applicationid = "+applicationid;
     try {
            Route route=new Route();
-           //made changes here
-           int available = route.totalRouteCapacity(routeId);
-           int filled = route.filledCapacityInRoute(routeId);
+           int available = route.availableCapacity(routeid);
+           int filled = route.filledCapacityInRoute(routeid);
            if(available > filled) {
         	   	  System.out.println("Good News there are seats available on this route.");
                   System.out.println("\nYour application is approved.. Login credentials will be shared soon");
@@ -149,7 +147,6 @@ public void changeType(int busid, String newType) {
     try {
           Connections.sendStatement(query);                   
           System.out.println("\nType of the bus changed to "+newType);
-          Connections.closeConnection();
          
                    }
      catch(Exception e) 

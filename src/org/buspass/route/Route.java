@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import org.buspass.connection.Connections;
 
 /**
- * @author missandh
  *
  *Methods :
  *
@@ -136,7 +135,6 @@ public class Route {
 			if(result.next())
 				 routeId = result.getInt(1);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		Connections.closeConnection();
@@ -192,8 +190,7 @@ try {
 
 
 public void removeBusFromRoute(int routeid,int busid) {
-       // TODO Auto-generated method stub
-       //Connection con = Connections.makeConnection();
+
  String query = "update bus set routeid = null where busid = "+busid+" ;";
  System.out.println("\nBus "+busid + " removed from route "+ routeid);
 
@@ -207,6 +204,91 @@ Connections.closeConnection();
 }        
        
 }
+
+public int availableCapacity(int routeid) {
+    Connection con = Connections.makeConnection();
+    String query = "select (Total_capacity - Occupied_capacity) as Available_Capacity from((select sum(tb.capacity) as Total_capacity from bus b, typeofbus tb where b.bustype=tb.bustype and routeid ="+routeid+")x,(select count(bm.buspassid) as Occupied_capacity from buspassmaster bm, bus b where b.routeid = bm.routeid)y)";
+ int available=0;
+    try {
+    ResultSet rs = Connections.sendQuery(con, query);
+    while(rs.next()) {
+           int i = rs.getInt("Available_Capacity");
+           available = i;
+           System.out.println("\nNumber of avaiable seats: "+available);
+    }
+    Connections.closeConnection();
+ }catch(Exception e) {
+    e.printStackTrace();
+ }
+    return available;
+}
+
+public void updateApplication(int routeid) {
+
+    String query = "insert into buspassapplication (applicationid,routeid, approvalstatus,rejectionreason,amount) values (default,"+routeid+",'Pending',null,250)";
+    try {
+           Connections.sendStatement(query);
+    }catch(Exception e ) {
+           e.printStackTrace();
+    }
+}
+
+public void visitorToUser(int applicationid, String name, String password, String address, int phonenumber, String emailid) {
+    String query = "insert into visitor (visitorid,applicationid,name,password,address,phonenumber,emailid) values (default,"+applicationid+",\'"+name+"\',\'"+password+"\',\'"+address+"\',"+phonenumber+",\'"+emailid+"\' ) ;";
+    try {
+           Connections.sendStatement(query);
+    }catch(Exception e) {
+           e.printStackTrace();
+    }
+    
+    
+    
+}
+
+public static int visitorToUser( int applicationid) {
+    String query = "select name,password,address,phonenumber,emailid from visitor where applicationid = "+applicationid;
+    Connection con = Connections.makeConnection();
+    String name = null,password=null,address=null,emailid=null;
+    int phonenumber=0,userid=0;
+    try {
+           ResultSet rs = Connections.sendQuery(con,query);
+           while(rs.next()) {
+                 name = rs.getString("name");
+                   password = rs.getString("password");
+                 address = rs.getString("address");
+           phonenumber = rs.getInt("phonenumber");
+                 emailid = rs.getString("emailid");
+           }
+           String query1 = "insert into user (userid,password,name,address,phonenumber,emailid,isAdmin) values (default,\'"+password+"\',\'"+name+"\',\'"+address+"\',"+phonenumber+",\'"+emailid+"\',false)";
+           Connections.sendStatement(query1);
+           String query2 = "select max(userid) from user;";
+           ResultSet rs1 = Connections.sendQuery(con, query2);
+           while(rs1.next()) {
+                 userid = rs1.getInt("max(userid)"); 
+           }      
+    }catch(Exception e) {
+           e.printStackTrace();
+    }
+    return userid;
+}
+
+public int getApplicationId() {
+    int aid = 0;
+    Connection con = Connections.makeConnection();
+    String query = "select max(applicationid) from buspassapplication ;";
+    try {
+           ResultSet rs  = Connections.sendQuery(con, query);
+           while(rs.next()) {
+                 aid = rs.getInt(1);
+           }
+           Connections.closeConnection();
+    }catch (Exception e) {
+           e.printStackTrace();
+    }
+    return aid;
+    
+}
+
 
 	/**
 	 * Private inner Class Stop

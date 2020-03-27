@@ -1,7 +1,5 @@
 package org.buspass.user;
 
-import java.util.Scanner;
-
 import org.buspass.connection.Connections;
 import org.buspass.menu.Menu;
 import org.buspass.route.Bus;
@@ -31,7 +29,6 @@ public class Admin extends Employee{
         bus.newRequests();
         int selection=0;
         System.out.println("\n\nSelect application id : ");
-        //Was selection = Integer.parseInt(Menu.userChoice.nextLine());
         selection = Menu.userChoice.nextInt();
         selectApplication(selection);
         }
@@ -45,67 +42,68 @@ public class Admin extends Employee{
 	
 	//method to see the type of vehicles available on all routes/particular route 
 	//based on user input
-	public  void typeofvehicles() {
-		Bus bus = new Bus();
-		try (Scanner input = new Scanner(System.in)) {
-			System.out.println("\nDo you want to view any specific route: type yes/no ");
-			String choice = input.nextLine();
-			if (choice.equals("yes")) {
-				System.out.println("\nPlease enter routeid : ");
-				int routeid = Integer.parseInt(input.nextLine());
-				bus.viewTypeCount(routeid);
+	public  void typeofVehicles() {
+		System.out.println("\nDo you want to view any specific route: type yes/no ");
+		String choice = Menu.userChoice.next();
+		if (choice.equals("yes")) {
+			System.out.println("\nPlease enter routeid : ");
+			int routeid = Menu.userChoice.nextInt();
+			bus.viewTypeCount(routeid);
 			}
 			else {
 				bus.viewTypeCount();
 			}
-		}
+		//previousMenu();
 }
-	
-	//incomplete
-	//method to change the route of bus based on busid
-	//and routeId of the new route(to which bus need to be assigned)
-	public void changeRouteOfBus1() {
-		try (Scanner input = new Scanner(System.in)) {
+
+	/*:-change the route of bus
+	 * method to change the route of bus based on routeid of route on which bus is currently running
+	 * and routeid of route(to which bus need to be assigned)
+	 */	public void changeRouteOfBus() {
 			int filledCapacity=0;
 			int totalCapacity=0;
 			int busCapacity=0;
-			int availableCapacity=0;
-			System.out.println("Enter the busId whose route you want to change: ");
-			int busId=Integer.parseInt(input.nextLine());
-			System.out.println("Enter the Route ID to which you want to assign the bus " + busId);
-			int routeId=Integer.parseInt(input.nextLine());
-			filledCapacity=route.filledCapacityInRoute(routeId);
-			totalCapacity=route.totalRouteCapacity(routeId);
+			int availableCapacity=0; 
+			System.out.println("Enter the routeId from which you want to remove the bus");
+			int oldRouteId=Menu.userChoice.nextInt();
+			route.getBussesInRoute(oldRouteId);
+			System.out.println("enter the busId whose route you want to change");
+			int busId=Menu.userChoice.nextInt();
+			System.out.println("enter the routeId to which you want to assign the bus");
+			int newRouteId=Menu.userChoice.nextInt();
+			filledCapacity=route.filledCapacityInRoute(newRouteId);
+			totalCapacity=route.totalRouteCapacity(newRouteId);
 			
 			availableCapacity=totalCapacity-filledCapacity;
 			if(availableCapacity >= busCapacity)
-				System.out.println("Update the Bus table");//need to write update statement to bus table
+				if(Connections.sendStatement("Update bus SET routeid="+ newRouteId +" where busid="+ busId + " ;"))
+					System.out.println("Route of bus is changed");
+				else
+					System.out.println("sorry route of bus can't be changed");
 			else
-				System.out.println("Sorry route of bus can't be changed as there are users on this route who will be affected.");
+				System.out.println("sorry route of bus can't be changed");
 			
 			
-		}
+		
 		
 	}
 
 	
-	/*functionalty @2 admin wants to add new route
+	/*method to add a new route
+	 *  admin wants to add new route
 	 * 
 	 */
 	public void addNewRoute() {
 		int cost=0;
 		Route route=new Route();
 		String stop=null;
-		//ArrayList<String> list=new ArrayList<String>();
 			System.out.println("Enter the cost for route which you want to create");			
 			cost=Menu.userChoice.nextInt();
-			System.out.println("Enter all the stops in order present in the route(press space after every stop) : ");
-			stop=(Menu.userChoice.nextLine());
-			String[] stopArray=stop.split(" ");
-			route.addRoute(cost, stopArray);
-			/*
-			 * for(int i=0;i<stopArray.length;i++) { System.out.println(stopArray[i]); }
-			 */		
+			System.out.println("Enter all the stops in order present in the route(press comma \",\" after every stop and enter to end) : ");
+			Menu.userChoice.nextLine();
+			stop=Menu.userChoice.nextLine();
+			String[] stopArray=stop.split(",");
+			route.addRoute(cost, stopArray);	
 	}
 
 	
@@ -117,13 +115,9 @@ public class Admin extends Employee{
 		int routeId=0;
 		int filledCapacity=0;
 		Route route=new Route();
-		try (Scanner input = new Scanner(System.in)) {
-			System.out.println("Enter the routeid of existing Route that you want to delete");
-			routeId=Integer.parseInt(input.nextLine());
-			
-			//need a function to check that route exist or not
-			
-			filledCapacity=route.filledCapacityInRoute(routeId);
+		System.out.println("Enter the routeid of existing Route that you want to delete");
+		routeId=Menu.userChoice.nextInt();
+		filledCapacity=route.filledCapacityInRoute(routeId);
 			if(filledCapacity!=0) {
 				System.out.println("Sorry, this route can't be removed");
 			}
@@ -138,61 +132,34 @@ public class Admin extends Employee{
 			
 		}
 		
-		
-	}
 
-	public void changeRouteOfBus() {
-		int filledCapacity=0;
-		int totalCapacity=0;
-		int busCapacity=0;
-		int availableCapacity=0; 
-		System.out.println("Enter the routeId from which you want to remove the bus");
-		int oldRouteId=Menu.userChoice.nextInt();
-		route.getBussesInRoute(oldRouteId);
-		System.out.println("enter the busId whose route you want to change");
-		int busId=Menu.userChoice.nextInt();
-		System.out.println("enter the routeId to which you want to assign the bus");
-		int newRouteId=Menu.userChoice.nextInt();
-		filledCapacity=route.filledCapacityInRoute(newRouteId);
-		totalCapacity=route.totalRouteCapacity(newRouteId);
-		
-		availableCapacity=totalCapacity-filledCapacity;
-		if(availableCapacity >= busCapacity)
-			if(Connections.sendStatement("Update bus SET routeid="+ newRouteId +" where busid="+ busId + " ;"))
-				System.out.println("Route of bus is changed");
-			else
-				System.out.println("sorry route of bus can't be changed");
-		else
-			System.out.println("sorry route of bus can't be changed");
-		
-}
 	//method to change type of bus
 	public void changeBusTypeInRoute() {
 	    
-		int busid =0;
-		String newType="", oldType = "";
 	    System.out.println("\nSelect route id to change bus type ");
 	    int routeid = Menu.userChoice.nextInt();
 	    route.getBussesInRoute(routeid);
 	    System.out.println("\nSelect busid to change type : ");
-	    busid = Menu.userChoice.nextInt();
-	    oldType = bus.getBusType(busid);
-	    int oldCapacity = bus.getTypeCapacity(oldType);
-	    System.out.println("Previous capacity of bus "+ oldCapacity);
+	            int busid = Menu.userChoice.nextInt();
+	            String oldType = bus.getBusType(busid);
+	            int oldCapacity = bus.getTypeCapacity(oldType);
+	            System.out.println("Previous capacity of bus "+oldCapacity);
 	                 
-	    System.out.println("\nPlease enter new type : (Van(7)/Mini(15)/Large(30)) ");
-        newType = Menu.userChoice.nextLine();
-	    //System.out.println("Newtype"+newType);
-	    int newCapacity = bus.getTypeCapacity(newType);
-	    //if (newCapacity == 0)
-	    System.out.println("New capacity is unchanged");
-	    System.out.println("\nnew capacity  is "+newCapacity);
-	    //if upgrading to larger bus then automatically change
-	    if (newCapacity >= oldCapacity)
-	    	bus.changeType(busid,newType);
-	    else
-	        System.out.println("You are trying to reduce capacity of the route, please add a bus before proceeding.");	                        
-	    }
+	            System.out.println("\nPlease enter new type : (Van/Mini/Large) ");
+	            String newType = Menu.userChoice.next();
+	            int newCapacity = bus.getTypeCapacity(newType);
+	            System.out.println("\nnew capacity  is "+newCapacity);
+	                   //if upgrading to larger bus then automatically change
+	            if (newCapacity >= oldCapacity) {
+	            	bus.changeType(busid,newType);
+	                       	
+	                        }
+	           else {
+	                 System.out.println("You are trying to reduce capacity of the route, please add a bus before proceeding.");
+	                               }
+	                        
+	                                                           
+	                }
 
 	public void changeNumberofBussesInRoute() {
 	       
@@ -200,7 +167,7 @@ public class Admin extends Employee{
 	              int routeid = Menu.userChoice.nextInt();
 	              bus.getBussesInRoute(routeid);
 	              System.out.println("\nSelect an option to continue, \nTo add a bus type 'add', \nTo remove type 'remove' and press enter: ");
-	              String selection = Menu.userChoice.nextLine();
+	              String selection = Menu.userChoice.next();
 	              if(selection.equals("add")) {
 	                     bus.getAvailableBusses();
 	                     System.out.println("\nSelect bus id to add to the route: ");

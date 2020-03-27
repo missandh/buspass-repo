@@ -14,7 +14,6 @@ public class AdminHandler
 	 * @param userid
 	 */
 	public AdminHandler(int userid) {
-		// TODO Auto-generated constructor stub
 		admin.setUserid(userid);
 	}
 
@@ -48,7 +47,7 @@ public class AdminHandler
 		System.out.println("|------------------------------------------|");
 	}
 	
-	public void displayAdminOptions() {
+	private void displayAdminOptions() {
 		System.out.println("\nPlease select an option to continue");
 		
 		System.out.println("1. Approve/Reject bus pass apllication");
@@ -88,7 +87,7 @@ public class AdminHandler
 			break;
 			
 		case 6:
-			 admin.typeofvehicles();
+			 admin.typeofVehicles();
 			 break;
 			 
 		case 7: 
@@ -100,6 +99,7 @@ public class AdminHandler
 			break;
 			
 		default:
+			System.out.println("Wrong Input, try again\n");
 			break;
 		}
 	}
