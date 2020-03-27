@@ -40,6 +40,173 @@ public class Route {
 	String table = "route";
 	private int routeid;
 	
+	
+	public  int filledCapacityInRoute(int routeId) {
+		Connection con = Connections.makeConnection();
+		String query = "select count(buspassid) as Filled_Capacity from buspassmaster where routeid = "+routeId+" and buspassstatus = 'Active' ";
+		int filled = 0;
+		try {
+			ResultSet rs = Connections.sendQuery(con, query);
+			while(rs.next()) {
+				 filled = rs.getInt("Filled_Capacity");
+				//filled = filledcapacity;
+				//System.out.println(filled);
+			}
+			
+			Connections.closeConnection();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return filled;
+		}
+	
+	//Overloading filledCapacityInRoute
+	
+	public  int filledCapacityInRoute(int routeId, int scheduleId) {
+		Connection con = Connections.makeConnection();
+		String query = "select count(buspassid) as Filled_Capacity from buspassmaster where routeid = "+routeId+" and buspassstatus = 'Active' and scheduleid= "+scheduleId+";";
+		int filled = 0;
+		try {
+			ResultSet rs = Connections.sendQuery(con, query);
+			while(rs.next()) {
+				 filled = rs.getInt("Filled_Capacity");
+			}
+			
+			Connections.closeConnection();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return filled;
+		}
+	
+	//return total capacity of route
+	public  int totalRouteCapacity(int routeId) {
+		int capacity=0;
+		Connection con = Connections.makeConnection();
+		String query = "select sum(tb.capacity) as Total_capacity from bus b, typeofbus tb where b.bustype=tb.bustype and routeid =" + routeId + ";";
+		try {
+			ResultSet rs  = Connections.sendQuery(con, query);
+			while(rs.next()) {
+				//System.out.println(rs.getString("sum(capacity)"));
+				capacity=rs.getInt("Total_capacity");
+			}
+			Connections.closeConnection();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return capacity;
+	}//end of viewTotalRouteCapacity
+
+	//Overloading totalCapacityInRoute
+	public  int totalRouteCapacity(int routeId, int scheduleId) {
+		int capacity=0;
+		Connection con = Connections.makeConnection();
+		String query = "select sum(tb.capacity) as Total_capacity from bus b, typeofbus tb,schedule s where b.bustype=tb.bustype and  s.routeid=b.routeid and s.routeid=" +routeId+ " and s.scheduleid="+ scheduleId+";";
+
+		try {
+			ResultSet rs  = Connections.sendQuery(con, query);
+			while(rs.next()) {
+				//System.out.println(rs.getString("sum(capacity)"));
+				capacity=rs.getInt("Total_capacity");
+			}
+			Connections.closeConnection();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return capacity;
+	}//end of viewTotalRouteCapacity
+
+	
+	/*method used to update route and stop table in db
+	 * @parameters
+	 * cost:type int for cost of the route
+	 * String[] stopArray: all the stop name in order
+	 * 
+	 * 
+	 * 
+	 */
+	public void addRoute(int cost, String[] stopArray) {
+		int routeId=0;
+		try {
+			Connection con = Connections.makeConnection();
+			ResultSet result=Connections.sendQuery(con, "select max(routeid) from route;");
+			if(result.next())
+				 routeId = result.getInt(1);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Connections.closeConnection();
+		Connections.sendStatement("insert into route values(" + (routeId+1) + "," +cost + ");");
+		
+		for(int i=0;i<stopArray.length;i++) {
+			Connections.sendStatement("insert into stop values(default,\'" + stopArray[i] + "\'," + (i+1) + "," + (routeId+1) +");");
+		}
+		
+		System.out.println("route is successfully added");
+		
+	}
+
+//method to print all the buses in a route
+public void getBussesInRoute(int routeid) {
+    Connection con = Connections.makeConnection();
+    String query = "select busid,bustype from bus where routeid= "+routeid+" ;";
+    try {
+           ResultSet rs = Connections.sendQuery(con, query);
+           System.out.println("\nHere is the list of busses under route id :");
+           System.out.println("\n*******************");
+           System.out.println("\nBusid -> bustype");
+           while(rs.next()) {
+                 System.out.println("\n"+rs.getInt(1)+" -> "+rs.getString(2)+" ");
+    
+           }
+           Connections.closeConnection();
+           }
+    catch(Exception e) {
+           e.printStackTrace();
+    }
+
+}
+
+
+
+public void addBusToRoute(int routeid,int busid) {
+       // TODO Auto-generated method stub
+       //Connection con = Connections.makeConnection();
+ String query = "update bus set routeid = "+routeid+" where busid = "+busid+" ;";
+ System.out.println("\nBus "+busid + " added to route "+ routeid);
+try {
+  Connections.sendStatement(query);  
+ //System.out.println("added bus in route "+ routeid);
+//Connections.closeConnection();
+}catch(Exception e){
+ //Handle errors for Class.forName
+ e.printStackTrace();
+}
+}
+
+
+
+
+public void removeBusFromRoute(int routeid,int busid) {
+       // TODO Auto-generated method stub
+       //Connection con = Connections.makeConnection();
+ String query = "update bus set routeid = null where busid = "+busid+" ;";
+ System.out.println("\nBus "+busid + " removed from route "+ routeid);
+
+try {
+  Connections.sendStatement(query);  
+ //System.out.println("removed bus in route "+ routeid);
+Connections.closeConnection();
+}catch(Exception e){
+ //Handle errors for Class.forName
+ e.printStackTrace();
+}        
+       
+}
 
 	/**
 	 * Private inner Class Stop
@@ -96,12 +263,6 @@ public class Route {
 			this.stoporder = stoporder;
 		}
 
-		/**
-		 * @return the table
-		 */
-		public String getTable() {
-			return table;
-		}
 
 		/**
 		 * @return the routeid
@@ -323,29 +484,17 @@ public class Route {
 	public void setRouteid(int routeid) {
 		this.routeid = routeid;
 	}
-	
-    public static void main(String args[]) 
-    {
-    	Route test = new Route();
-    	ArrayList<String> stopnames = new ArrayList();
-    	stopnames.add("HYD13");
-    	stopnames.add("Manikonda");
-    	stopnames.add("Gowlidoddi");
-    	stopnames.add("Gopanpally");
-    	stopnames.add("Nallagandla");
-    	test.addRoute(1500, stopnames);
-    	test.viewAllRoutesWithStops();
-    	test.viewTypeOfVehiclesPerRoute();
-    }
-
 
 
 	/**
 	 * @param routeid
 	 */
-	public boolean isSeatAvailableOnRoute(int routeid, int scheduleid) {
-		
+	public boolean isSeatAvailableOnRoute(int routeid, int scheduleid) 
+	{	
 		boolean availability = false;
+		//check if there is any seat available on the route and schedule being requested
+		if (totalRouteCapacity(routeid, scheduleid) - filledCapacityInRoute(routeid, scheduleid) > 0)
+			availability = true;
 		return availability;
 		
 	}

@@ -10,7 +10,6 @@ import java.sql.Statement;
  * * sending a query or statement to the connection and teardown connection. 
  * * @author missandh 
  * */
-import java.util.ArrayList; 
 
 public class Connections 
 { 

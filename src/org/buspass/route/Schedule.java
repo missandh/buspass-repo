@@ -5,10 +5,6 @@ package org.buspass.route;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-
 import org.buspass.connection.Connections;
 
 /**
@@ -101,10 +97,10 @@ public class Schedule {
 	
 	public void viewRouteSchedule(int routeid)
 	{
-		String squery = "SELECT * FROM "+ table + "WHERE routeid= " + routeid+";";
+		String squery = "SELECT * FROM "+ table + " WHERE routeid= " + routeid+";";
 		ResultSet rset = null;
-		ArrayList<String> cnames = new ArrayList<String>();
-		ArrayList<String> values = new ArrayList<String>();
+		//ArrayList<String> cnames = new ArrayList<String>();
+		//ArrayList<String> values = new ArrayList<String>();
 		Connection dbcon = Connections.makeConnection();
 
 		try 
@@ -112,7 +108,7 @@ public class Schedule {
 			rset = Connections.sendQuery(dbcon, squery);
 			while (rset.next())
 			{
-				System.out.println("Printing result...");
+				System.out.println("Here's the schedule for the route: " + routeid);
 				 
                 // Let's fetch the data by column name
                 int scheduleid = rset.getInt(1);

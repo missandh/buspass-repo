@@ -1,10 +1,7 @@
 package org.buspass.request;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import org.buspass.connection.*;
@@ -124,16 +121,27 @@ public class Request {
 		 */
 		Route userroute = new Route();
 		
-		String cquery = "update buspassmaster set buspassstatus = \"Active\" where userid = " + userid +";";
+		String cquery = "update buspassmaster set buspassstatus = \"Active\", routeid="+ routeid+ ", scheduleid="+ scheduleid + " where userid = " + userid +";";
 		if(getBusPassStatus(userid).toLowerCase() != "active")
 		{
 			if(userroute.isSeatAvailableOnRoute(routeid,scheduleid))
+			{
 				if (Connections.sendStatement(cquery))
 				{
 					System.out.println("Successfully Reactivated the buspass for userid: "+userid + " on Route ID: "+ routeid + " on selected Schedule");
 				}
-		}
-		
+				else
+				{
+					System.out.println("Something seems to have gone wrong while updating bus pass status. Please retry.");
+				}
+			}
+			else
+			{
+				System.out.println("Sorry there are no seats available on this route and schedule.");
+				System.out.println("Please try a different schedule and/or route");
+			}	
+					
+		}		
 		else 
 		{
 			System.out.println("The Buspass is already in Active state for user: "+ userid);

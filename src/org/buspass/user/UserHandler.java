@@ -1,27 +1,41 @@
 package org.buspass.user;
 
 import java.util.InputMismatchException;
-import java.util.Scanner;
+
+import org.buspass.menu.Menu;
 
 public class UserHandler 
 {
 	//Scanner input = new Scanner(System.in);
 	boolean exit;
+	boolean loggedout = false;
+
 	User bususer = new User();
 	
-	public void displayUserMenu() //throws Exception 
-	
+	/**
+	 * @param userid
+	 */
+	public UserHandler(int userid) 
+	{
+		bususer.setUserid(userid);
+	}
+
+
+	public void displayUserMenu() //throws Exception
 	{
 		displayUserHeader();
-		displayUserOptions();
-		int choice= getInput(); 	
-		executeChoice(choice);
+		int choice = -1;
+		while(!loggedout)
+		{
+			displayUserOptions();
+			choice= getInput(); 	
+			executeChoice(choice);
+		}
 	}
 	
 	
 	private int getInput() 
 	{
-		Scanner input = new Scanner(System.in);
 		int choice = -1;
 		
 		boolean validchoice = false;
@@ -30,7 +44,7 @@ public class UserHandler
     	    try 
     	    {
     			System.out.println("\nEnter your choice:");
-    	    	choice = input.nextInt();
+    	    	choice = Menu.userChoice.nextInt();
     	        if (choice >= 1 || choice <= 5 || choice == 9)
     	        {
     	        	validchoice = true;  // will not get here if nextInt() throws exception
@@ -40,12 +54,11 @@ public class UserHandler
     	        	System.out.println("Incorrect Choice");
     	    }
     	    catch (InputMismatchException e) {
-    	        input.nextLine();            // let the scanner skip over the bad input
+    	        Menu.userChoice.nextLine();            // let the scanner skip over the bad input
     	        System.out.println("ERROR!!! \nENTER 1, 2, 3, 4, 5 or 9 as your choice :");
     	    }
 		}
 		
-		input.close();
 		return choice;
 }
 
@@ -64,6 +77,7 @@ public class UserHandler
 		System.out.println("3. Give feedback on the Bus Pass Maintenance System");
 		System.out.println("4. View and Update your contact details");
 		System.out.println("5. Get Bus Pass Snapshot");
+		System.out.println("6. Logout");
 
 		System.out.println("9. Exit menu");
 	}
@@ -73,41 +87,39 @@ public class UserHandler
 		switch (choice)
 		{
 		case 1: 
-			System.out.println("View all the routes, their stops, type of vehicles, no of vehicles on each route");
+			System.out.println("\n*******View all the routes, their stops, type of vehicles, no of vehicles on each route*******");
 			bususer.viewAllDetails();
 			break;
 			
 		case 2:
-			System.out.println("Request cancel or Reactivate or Cancel Bus Pass");
+			System.out.println("\n*******Request cancel or Reactivate or Cancel Bus Pass*******\n");
 			bususer.requestAlterBusPass();
 			break;
 			
 		case 3://
-			System.out.println("Give feedback on the Bus Pass Maintenance System");
+			System.out.println("\n*******Give feedback on the Bus Pass Maintenance System*******\n");
 			bususer.provideFeedback();
 			break;
 			
 		case 4:
-			System.out.println("View and Update your contact details");
+			System.out.println("\n*******View and Update your contact details******\n");
 			bususer.updateUserData();
 			break;
 		
 		case 5: 
-			System.out.println("Get Bus Pass Snapshot");
+			System.out.println("\n*******Get Bus Pass Snapshot*******\n");
 			bususer.viewBuspassSnapshot(bususer.getUserid());
 			break;
 			
+		case 6:
+			System.out.println("Bye Bye. Thanks for using Amazon Transport System.");
+			System.out.println("\n*******Logging you out********\n");
+			loggedout= bususer.logout();
 		case 9:
 			break;
 			
 		}
 		
 	}
-	
-    public static void main(String args[]) 
-    {
-    	UserHandler newu = new UserHandler();
-    	newu.displayUserMenu();
-    }
 	
 }
