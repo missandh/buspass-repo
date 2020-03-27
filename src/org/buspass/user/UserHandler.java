@@ -112,10 +112,11 @@ public class UserHandler
 			break;
 			
 		case 6:
-			System.out.println("Bye Bye. Thanks for using Amazon Transport System.");
 			System.out.println("\n*******Logging you out********\n");
+			System.out.println("Bye Bye. Thanks for using Amazon Transport System.");
 			loggedout= bususer.logout();
-		case 9:
+			
+		default:
 			break;
 			
 		}

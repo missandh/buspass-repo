@@ -1,5 +1,6 @@
 package org.buspass.menu;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import org.buspass.user.UserHandler;
@@ -17,8 +18,17 @@ public class Menu {
 		// while(!exit) {
 		printMainMenu();
 		int choice = getInput();
-		executeChoice(choice);
-		
+		try
+		{
+			executeChoice(choice);
+		}
+		catch(Exception e)
+		{
+			System.out.println("Something went wrong. Please recheck the format of the userid and password");
+			e.printStackTrace();
+			System.out.println("Let's retry that in the correct format!");
+			displayMenu();
+		}
 	}
 
 	/* Private Functions to cut down scope only to Menu class */
@@ -44,12 +54,25 @@ public class Menu {
 		// Initializing choice with -1 to avoid conflict with menu options
 		int choice = -1;
 		// while (choice < 0 || choice >2 ) {
-		try {
+		try 
+		{
 			System.out.print("\nEnter your choice");
 			choice = Integer.parseInt(userChoice.nextLine());
-		} catch (NumberFormatException e) {
+		} 
+		catch (NumberFormatException nfe) 
+		{
 			System.out.println("Invalid choice, please try again");
-
+			nfe.printStackTrace();
+		}
+		catch(InputMismatchException ime)
+		{
+			System.out.println("ERROR! Please enter only numeric choices as provided in options.");
+			ime.printStackTrace();
+		}
+		catch(Exception e)
+		{
+			System.out.println("Something went wrong. Please retry.");
+			e.printStackTrace();
 		}
 
 		return choice;

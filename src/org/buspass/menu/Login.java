@@ -27,6 +27,11 @@ public class Login {
 			System.out.println("Employee object not returned");
 			ne.printStackTrace();
 		}
+		catch(NumberFormatException nfe)
+		{
+			System.out.println("Input fields format is incorrect");
+			nfe.printStackTrace();
+		}
 		catch (Exception e) 
 		{
 			System.out.println("Something went wrong during login.");
