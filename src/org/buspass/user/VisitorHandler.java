@@ -1,4 +1,4 @@
-package org.buspass.menu;
+package org.buspass.user;
 
 public class VisitorHandler {
 

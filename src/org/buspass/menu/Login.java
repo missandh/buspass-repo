@@ -13,9 +13,9 @@ public class Login {
 	public Employee askLogin() {
 		//Scanner input = new Scanner(System.in))
 		System.out.println("Enter your user Id: ");
-		int userId=Integer.parseInt(Menu.userChoice.nextLine());
+		int userId=Integer.parseInt(Menu.USERCHOICE.nextLine());
 		System.out.println("Enter ur password");
-		String password=Menu.userChoice.nextLine();
+		String password=Menu.USERCHOICE.nextLine();
 		Employee objuser = null; 
 		
 		try 

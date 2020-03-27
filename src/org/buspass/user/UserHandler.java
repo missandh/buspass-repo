@@ -44,17 +44,16 @@ public class UserHandler
     	    try 
     	    {
     			System.out.println("\nEnter your choice:");
-    	    	choice = Menu.userChoice.nextInt();
+    	    	choice = Menu.USERCHOICE.nextInt();
     	        if (choice >= 1 || choice <= 5 || choice == 9)
     	        {
     	        	validchoice = true;  // will not get here if nextInt() throws exception
-    	        	System.out.println("Great choice here we go!");
     	        }
     	        else
     	        	System.out.println("Incorrect Choice");
     	    }
     	    catch (InputMismatchException e) {
-    	        Menu.userChoice.nextLine();            // let the scanner skip over the bad input
+    	        Menu.USERCHOICE.nextLine();            // let the scanner skip over the bad input
     	        System.out.println("ERROR!!! \nENTER 1, 2, 3, 4, 5 or 9 as your choice :");
     	    }
 		}
@@ -115,6 +114,7 @@ public class UserHandler
 			System.out.println("\n*******Logging you out********\n");
 			System.out.println("Bye Bye. Thanks for using Amazon Transport System.");
 			loggedout= bususer.logout();
+			break;
 			
 		default:
 			break;

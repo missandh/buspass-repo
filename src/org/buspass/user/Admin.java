@@ -29,7 +29,7 @@ public class Admin extends Employee{
         bus.newRequests();
         int selection=0;
         System.out.println("\n\nSelect application id : ");
-        selection = Menu.userChoice.nextInt();
+        selection = Menu.USERCHOICE.nextInt();
         selectApplication(selection);
         }
  
@@ -44,10 +44,10 @@ public class Admin extends Employee{
 	//based on user input
 	public  void typeofVehicles() {
 		System.out.println("\nDo you want to view any specific route: type yes/no ");
-		String choice = Menu.userChoice.next();
+		String choice = Menu.USERCHOICE.next();
 		if (choice.equals("yes")) {
 			System.out.println("\nPlease enter routeid : ");
-			int routeid = Menu.userChoice.nextInt();
+			int routeid = Menu.USERCHOICE.nextInt();
 			bus.viewTypeCount(routeid);
 			}
 			else {
@@ -65,12 +65,12 @@ public class Admin extends Employee{
 			int busCapacity=0;
 			int availableCapacity=0; 
 			System.out.println("Enter the routeId from which you want to remove the bus");
-			int oldRouteId=Menu.userChoice.nextInt();
+			int oldRouteId=Menu.USERCHOICE.nextInt();
 			route.getBussesInRoute(oldRouteId);
 			System.out.println("enter the busId whose route you want to change");
-			int busId=Menu.userChoice.nextInt();
+			int busId=Menu.USERCHOICE.nextInt();
 			System.out.println("enter the routeId to which you want to assign the bus");
-			int newRouteId=Menu.userChoice.nextInt();
+			int newRouteId=Menu.USERCHOICE.nextInt();
 			filledCapacity=route.filledCapacityInRoute(newRouteId);
 			totalCapacity=route.totalRouteCapacity(newRouteId);
 			
@@ -98,10 +98,10 @@ public class Admin extends Employee{
 		Route route=new Route();
 		String stop=null;
 			System.out.println("Enter the cost for route which you want to create");			
-			cost=Menu.userChoice.nextInt();
+			cost=Menu.USERCHOICE.nextInt();
 			System.out.println("Enter all the stops in order present in the route(press comma \",\" after every stop and enter to end) : ");
-			Menu.userChoice.nextLine();
-			stop=Menu.userChoice.nextLine();
+			Menu.USERCHOICE.nextLine();
+			stop=Menu.USERCHOICE.nextLine();
 			String[] stopArray=stop.split(",");
 			route.addRoute(cost, stopArray);	
 	}
@@ -116,7 +116,7 @@ public class Admin extends Employee{
 		int filledCapacity=0;
 		Route route=new Route();
 		System.out.println("Enter the routeid of existing Route that you want to delete");
-		routeId=Menu.userChoice.nextInt();
+		routeId=Menu.USERCHOICE.nextInt();
 		filledCapacity=route.filledCapacityInRoute(routeId);
 			if(filledCapacity!=0) {
 				System.out.println("Sorry, this route can't be removed");
@@ -137,16 +137,16 @@ public class Admin extends Employee{
 	public void changeBusTypeInRoute() {
 	    
 	    System.out.println("\nSelect route id to change bus type ");
-	    int routeid = Menu.userChoice.nextInt();
+	    int routeid = Menu.USERCHOICE.nextInt();
 	    route.getBussesInRoute(routeid);
 	    System.out.println("\nSelect busid to change type : ");
-	            int busid = Menu.userChoice.nextInt();
+	            int busid = Menu.USERCHOICE.nextInt();
 	            String oldType = bus.getBusType(busid);
 	            int oldCapacity = bus.getTypeCapacity(oldType);
 	            System.out.println("Previous capacity of bus "+oldCapacity);
 	                 
 	            System.out.println("\nPlease enter new type : (Van/Mini/Large) ");
-	            String newType = Menu.userChoice.next();
+	            String newType = Menu.USERCHOICE.next();
 	            int newCapacity = bus.getTypeCapacity(newType);
 	            System.out.println("\nnew capacity  is "+newCapacity);
 	                   //if upgrading to larger bus then automatically change
@@ -164,20 +164,20 @@ public class Admin extends Employee{
 	public void changeNumberofBussesInRoute() {
 	       
 	       System.out.println("\nSelect route id to change number of busses: ");
-	              int routeid = Menu.userChoice.nextInt();
+	              int routeid = Menu.USERCHOICE.nextInt();
 	              bus.getBussesInRoute(routeid);
 	              System.out.println("\nSelect an option to continue, \nTo add a bus type 'add', \nTo remove type 'remove' and press enter: ");
-	              String selection = Menu.userChoice.next();
+	              String selection = Menu.USERCHOICE.next();
 	              if(selection.equals("add")) {
 	                     bus.getAvailableBusses();
 	                     System.out.println("\nSelect bus id to add to the route: ");
-	                     int busid = Menu.userChoice.nextInt();
+	                     int busid = Menu.USERCHOICE.nextInt();
 	                     route.addBusToRoute(routeid,busid);
 	                     bus.getBussesInRoute(routeid);
 	                     }
 	              else if(selection.equals("remove")){
 	                     System.out.println("\nEnter bus id to remove from route : ");
-	                     int busid = Menu.userChoice.nextInt();
+	                     int busid = Menu.USERCHOICE.nextInt();
 	                     route.removeBusFromRoute(routeid,busid);
 	                     route.getBussesInRoute(routeid);
 	              }

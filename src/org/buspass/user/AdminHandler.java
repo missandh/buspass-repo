@@ -35,8 +35,8 @@ public class AdminHandler
 	private int getInput() {
 		int choice = 0;
 		System.out.println("\nEnter your choice:");
-		if(Menu.userChoice.hasNextLine())
-			choice=Menu.userChoice.nextInt();			
+		if(Menu.USERCHOICE.hasNextLine())
+			choice=Menu.USERCHOICE.nextInt();			
 		return choice;
 	}
 	

@@ -76,7 +76,7 @@ public class Request {
 		 * User can request to cancel the bus pass
 		 * Request will be auto approved and data updated
 		 */
-		String cquery = "update buspassmaster set buspassstatus = \"Cancel\" where userid = " + userid +";";
+		String cquery = "update buspassmaster set buspassstatus = \"Cancel\", routeid=default, scheduleid=default where userid = " + userid +";";
 		if(getBusPassStatus(userid).toLowerCase() != "cancel")
 		{
 			if (Connections.sendStatement(cquery))
@@ -98,7 +98,7 @@ public class Request {
 		 * User can request to suspend the bus pass
 		 * Request will be auto approved and data updated
 		 */
-		String cquery = "update buspassmaster set buspassstatus = \"Suspend\" where userid = " + userid +";";
+		String cquery = "update buspassmaster set buspassstatus = \"Suspend\", routeid=default, scheduleid=default where userid = " + userid +";";
 		if(getBusPassStatus(userid).toLowerCase() != "suspend")
 		{
 			if (Connections.sendStatement(cquery))
@@ -147,64 +147,4 @@ public class Request {
 			System.out.println("The Buspass is already in Active state for user: "+ userid);
 		}		
 	}
-
-	
-	
-//	public void requestAlterBusPass (String reqtype, int userid, Date dateofrequest) {
-//		
-//		/*
-//		 * Request to cancel, suspend, reactivate the bus pass by bus user
-//		 * The cancel and suspend request will be auto approved without any checks
-//		 * The reactivate request will depend on total capacity available on the route he wants
-//		 */
-//		
-//		
-//		String reqstatus = "New";
-//		String alterquery = "INSERT INTO "+alterTable+" VALUES(default,"+reqtype+ ","+ userid+ "," + dateofrequest+ "," +reqstatus+ ")";
-//
-//		if( Connections.sendStatement(alterquery))
-//			System.out.println("Successfully submitted a request to " + reqtype + " the bus pass. Please note an administrator will need to validate your request.");		
-//	}
-//	
-//	public void validateBusPassRequest()
-//	{
-//		ResultSet result;
-//		int breqid;
-//		String breqtype = new String();
-//		int userid;
-//		Date dateofrequest;
-//		String reqstatus = new String();
-//		
-//		Connection dbcon = Connections.makeConnection();
-//		String selectquery = "select * from buspassalterrequest where reqstatus = New" ;
-//		
-//		try {
-//			
-//			PreparedStatement pst = dbcon.prepareStatement(selectquery);
-//			result = pst.executeQuery();
-//			
-//			while(result.next())
-//			{
-//				breqid = result.getInt(1);
-//				breqtype = result.getString(2);
-//				userid = result.getInt(3);
-//				dateofrequest= result.getDate(4);
-//				reqstatus = result.getString(5);
-//			}
-//			
-//				System.out.println("Successfully updated status of the request " + breqtype + " to " + reqstatus );
-//		} 
-//			
-//		catch (SQLException sqlex) {
-//			sqlex.printStackTrace();
-//		}
-//		catch(Exception e)
-//		{ 
-//			System.out.println(e);
-//		}
-//
-//		Connections.closeConnection();
-//
-//	}
-
 }

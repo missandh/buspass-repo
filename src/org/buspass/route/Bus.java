@@ -131,7 +131,7 @@ public  void validateBusPassApplication(int routeid,int applicationid) {
            int filled = route.filledCapacityInRoute(routeid);
            if(available > filled) {
         	   	  System.out.println("Good News there are seats available on this route.");
-                  System.out.println("\nYour application is approved.. Login credentials will be shared soon");
+                  System.out.println("\nThe Bus Pass application is approved for applicant with application id: "+ applicationid +". Login credentials will be shared soon");
                   Connections.sendStatement(query);
            }
            else

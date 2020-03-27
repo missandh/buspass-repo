@@ -8,25 +8,28 @@ import org.buspass.user.AdminHandler;
 import org.buspass.user.Employee;
 
 public class Menu {
-	boolean exit;
-
-	public static final Scanner userChoice = new Scanner(System.in);
+	boolean exit=false;
+	public static final Scanner USERCHOICE = new Scanner(System.in);
 
 	public void displayMenu() throws Exception // throws Exception
 	{
-		printMainMenu();
-		int choice = getInput();
-		try
-		{
-			executeChoice(choice);
-		}
-		catch(Exception e)
-		{
-			System.out.println("Something went wrong. Please recheck the format of the userid and password");
-			e.printStackTrace();
-			System.out.println("Let's retry that in the correct format!");
-			displayMenu();
-		}
+		 printWelcome();
+		 while(!exit) 
+		 {
+			printMainMenu();
+			int choice = getInput();
+			try
+			{
+				executeChoice(choice);
+			}
+			catch(Exception e)
+			{
+				System.out.println("Something went wrong. Please recheck the format of the userid and password");
+				e.printStackTrace();
+				System.out.println("Let's retry that in the correct format!");
+				displayMenu();
+			}
+		 }
 	}
 
 	/* Private Functions to cut down scope only to Menu class */
@@ -47,29 +50,35 @@ public class Menu {
 	}
 
 	private int getInput() {
-		// Scanner input = new Scanner(System.in)
-
+		
 		// Initializing choice with -1 to avoid conflict with menu options
 		int choice = -1;
-		// while (choice < 0 || choice >2 ) {
+		
 		try 
 		{
 			System.out.print("\nEnter your choice");
-			choice = Integer.parseInt(userChoice.nextLine());
+
+			choice = Integer.parseInt(USERCHOICE.nextLine());
 		} 
 		catch (NumberFormatException nfe) 
 		{
 			System.out.println("Invalid choice, please try again");
+			if(USERCHOICE.hasNext())
+				USERCHOICE.nextLine();
 			nfe.printStackTrace();
 		}
 		catch(InputMismatchException ime)
 		{
 			System.out.println("ERROR! Please enter only numeric choices as provided in options.");
+			if(USERCHOICE.hasNext())
+				USERCHOICE.nextLine();
 			ime.printStackTrace();
 		}
 		catch(Exception e)
 		{
 			System.out.println("Something went wrong. Please retry.");
+			if(USERCHOICE.hasNext())
+				USERCHOICE.nextLine();
 			e.printStackTrace();
 		}
 
@@ -87,7 +96,7 @@ public class Menu {
 				  if(newemp.usertype.equals("admin")) 	//after validation call the Admin handler
 					  new AdminHandler(newemp.userid).displayAdminMenu();
 				  else
-					  System.out.println("Invalid credentials");		  					  
+					  System.out.println("Invalid credentials\n\n");		  					  
 				  break;
 				 
 			case 2:
@@ -108,11 +117,12 @@ public class Menu {
 	
 			case 9:
 				exit = true;
-				System.out.println("Thank you for using Amazon Transport System. Signing you out.");
+				System.out.println("Thank you for using Amazon Transport System. Wish to see you again soon.");
 				break;
+				
 			default:
 				System.out.println("Unable to make selection, Please try again");
-				
+				break;
 			}
 		}//end if
 		else
@@ -132,7 +142,7 @@ public class Menu {
 		}
 		finally
 		{
-			userChoice.close();
+			USERCHOICE.close();
 		}
 	}
 }
