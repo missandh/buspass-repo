@@ -91,7 +91,8 @@ public class Schedule {
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			System.out.println("Something went wrong during query to the database!");
+			//e.printStackTrace();
 		}
 	}
 	

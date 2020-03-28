@@ -90,7 +90,8 @@ public class Menu {
 				if(newemp.usertype.equals("admin")) 	//after validation call the Admin handler
 					new AdminHandler(newemp.userid).displayAdminMenu();
 				else
-					System.out.println("Invalid credentials\n\n");		  					  
+					System.out.println("Invalid credentials\n\n");
+				exit=true;
 			break;
 				 
 			case 2:
@@ -99,17 +100,18 @@ public class Menu {
 				if(newemp.usertype.equals("user"))
 					new UserHandler(newemp.userid).displayUserMenu();
 				else			 
-					System.out.println("Invalid credentials, Please try again"); 
+					System.out.println("Invalid credentials,\n\n");
+				exit=true;
 			break;
 	
 			case 3:
 				 //usertype is visitor here
 				newemp = login.grantVisitorEntry();
 				new VisitorHandler().displayVisitorMenu();
-				//visitor.displayVisitorMenu();
+				exit=true;
 				break;
 	
-			case 9:
+			case 0:
 				exit = true;
 				System.out.println("Thank you for using Amazon Transport System. Wish to see you again soon.");
 				break;

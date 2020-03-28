@@ -77,15 +77,17 @@ public class Visitor extends Employee {
 		System.out.println("\n Percentage occupancy = "+ Math.round(percent*100) + "%");
 	}
 	
-	public void addVisitor(int applicationid, String name, String password, String address, int phonenumber, String emailid) {
-	    
+	public void addVisitor(int applicationid, String name, String password, String address, int phonenumber, String emailid) 
+	{    
 		String query = "insert into visitor (visitorid,applicationid,name,password,address,phonenumber,emailid) values (default,"+applicationid+",\'"+name+"\',\'"+password+"\',\'"+address+"\',"+phonenumber+",\'"+emailid+"\' ) ;";
 	    
-		try {
+		try 
+		{
 	           Connections.sendStatement(query);
 	    }
-	    catch(Exception e) {
-	           e.printStackTrace();
+	    catch(Exception e) 
+		{
+	           System.out.println("Something went wrong!");
 	    }
 	}
 
@@ -94,15 +96,16 @@ public class Visitor extends Employee {
 	    Connection con = Connections.makeConnection();
 	    String name = null,password=null,address=null,emailid=null;
 	    int phonenumber=0,userid=0;
-	    try {
-	           ResultSet rs = Connections.sendQuery(con,query);
-	           while(rs.next()) {
-	                 name = rs.getString("name");
-	                   password = rs.getString("password");
-	                 address = rs.getString("address");
-	           phonenumber = rs.getInt("phonenumber");
-	                 emailid = rs.getString("emailid");
-	           }
+	    try 
+	    {
+	    	ResultSet rs = Connections.sendQuery(con,query);
+	        while(rs.next()) {
+	        	name = rs.getString("name");
+	            password = rs.getString("password");
+	            address = rs.getString("address");
+	            phonenumber = rs.getInt("phonenumber");
+	            emailid = rs.getString("emailid");
+	    }
 	           String query1 = "insert into user (userid,password,name,address,phonenumber,emailid,isAdmin) values (default,\'"+password+"\',\'"+name+"\',\'"+address+"\',"+phonenumber+",\'"+emailid+"\',false)";
 	           Connections.sendStatement(query1);
 	           String query2 = "select max(userid) from user;";
@@ -110,7 +113,9 @@ public class Visitor extends Employee {
 	           while(rs1.next()) {
 	                 userid = rs1.getInt("max(userid)"); 
 	           }      
-	    }catch(Exception e) {
+	    }
+	    catch(Exception e) 
+	    {
 	           e.printStackTrace();
 	    }
 	    return userid;

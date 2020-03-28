@@ -161,6 +161,7 @@ public class User extends Employee{
 		}
 		catch (SQLException e)
 		{
+			System.out.println("Connectivity issues");
 			e.printStackTrace();
 		}
 		Connections.closeConnection();
@@ -368,12 +369,13 @@ viewBuspassSnapshot()
 		}
 		catch (SQLException se)
 		{
+			System.out.println("Connectivity Issues!");
 			se.printStackTrace();
 		}
 		catch(Exception e)
 		{
 			System.out.println("Something went wrong.");
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		Connections.closeConnection();
     }
@@ -405,7 +407,7 @@ viewBuspassSnapshot()
     	    {
     	        Menu.USERCHOICE.nextLine();            // let the scanner skip over the bad input
     	        System.out.println("ERROR!!! \nENTER a 10 digit number :");
-    	        ime.printStackTrace();
+    	       // ime.printStackTrace();
     	    }
     	    catch (Exception e)
     	    {
@@ -423,7 +425,9 @@ viewBuspassSnapshot()
 	/**
 	 * 
 	 */
-	public boolean logout() {
+	public boolean logout() 
+	{
+		System.out.println("Thank you for using Amazon Transport System. Wish to see you again soon");
 		return true;
 	}
     

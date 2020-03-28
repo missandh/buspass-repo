@@ -38,7 +38,7 @@ public class VisitorHandler
         System.out.println("\n1. View all exsisting routes"
                            + "\n2. View percentage occupancy in a route:  "
                            + "\n3. Apply for a bus pass"
-                           + "\n0. Return to previous menu");
+                           + "\n0. Exit");
     }
     
     private void executeChoice(int choice) 
@@ -63,6 +63,7 @@ public class VisitorHandler
                 
            case 0:
              	 exit=true; //goback to previous menu
+             	 System.out.println("Thank you for visiting Amazon Transport System. Have a great time!");
              	 return;              
         }
     }
