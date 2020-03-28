@@ -77,7 +77,7 @@ public class Request {
 		 * User can request to cancel the bus pass
 		 * Request will be auto approved and data updated
 		 */
-		String cquery = "update buspassmaster set buspassstatus = \"Cancel\", routeid=default, scheduleid=default where userid = " + userid +";";
+		String cquery = "update buspassmaster set buspassstatus = \"Cancel\", routeid=default, scheduleid=default, stopid=default where userid = " + userid +";";
 		if(getBusPassStatus(userid).toLowerCase() != "cancel")
 		{
 			if (Connections.sendStatement(cquery))
@@ -99,7 +99,7 @@ public class Request {
 		 * User can request to suspend the bus pass
 		 * Request will be auto approved and data updated
 		 */
-		String cquery = "update buspassmaster set buspassstatus = \"Suspend\", routeid=default, scheduleid=default where userid = " + userid +";";
+		String cquery = "update buspassmaster set buspassstatus = \"Suspend\", routeid=default, scheduleid=default, stopid=default where userid = " + userid +";";
 		if(getBusPassStatus(userid).toLowerCase() != "suspend")
 		{
 			if (Connections.sendStatement(cquery))
