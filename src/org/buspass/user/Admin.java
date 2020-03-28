@@ -109,57 +109,63 @@ public class Admin extends Employee{
 	
 	/*to remove existing route
 	 * @functionality 3
-	 * #incomplete
 	 */
-	public void removeRoute() {
+	public void removeRoute() 
+	{
 		int routeId=0;
 		int filledCapacity=0;
 		Route route=new Route();
 		System.out.println("Enter the routeid of existing Route that you want to delete");
 		routeId=Menu.USERCHOICE.nextInt();
 		filledCapacity=route.filledCapacityInRoute(routeId);
-			if(filledCapacity!=0) {
-				System.out.println("Sorry, this route can't be removed");
-			}
-			else {
-				//update bus table make route id null
-				Connections.sendStatement("Update bus Set routeid=NULL where routeid="+ routeId +" ;");
-				//delete stop table where routeid matches
-				Connections.sendStatement("delete from stop where routeid=" + routeId +" ;");
-				Connections.sendStatement("delete from route where routeid=" + routeId +" ;");
-				System.out.println("Route has been successfully removed.");
-			}
 			
+		if(filledCapacity!=0) {
+			System.out.println("Sorry, this route can't be removed as there are active route users");
+		}	
+		else if(route.checkApplications(routeId)) 
+		{
+			System.out.println("Sorry we cannot remove this route as there are bus pass applications on this route");
 		}
-		
+		else 
+		{				
+			//update bus table make route id null
+			Connections.sendStatement("Update bus Set routeid=NULL where routeid="+ routeId +" ;");
+			//deleting all schedules from schedule table
+			Connections.sendStatement("delete from schedule where routeid="+routeId + ";");
+			//delete stop table where routeid matches
+			Connections.sendStatement("delete from stop where routeid=" + routeId +" ;");
+			Connections.sendStatement("delete from route where routeid=" + routeId +" ;");
+			System.out.println("Route has been successfully removed.");
+		}
+	}
 
 	//method to change type of bus
-	public void changeBusTypeInRoute() {
-	    
+	public void changeBusTypeInRoute() 
+	{
 	    System.out.println("\nSelect route id to change bus type ");
 	    int routeid = Menu.USERCHOICE.nextInt();
 	    route.getBussesInRoute(routeid);
 	    System.out.println("\nSelect busid to change type : ");
-	            int busid = Menu.USERCHOICE.nextInt();
-	            String oldType = bus.getBusType(busid);
-	            int oldCapacity = bus.getTypeCapacity(oldType);
-	            System.out.println("Previous capacity of bus "+oldCapacity);
+	    int busid = Menu.USERCHOICE.nextInt();
+	    String oldType = bus.getBusType(busid);
+	    int oldCapacity = bus.getTypeCapacity(oldType);
+	    System.out.println("Previous capacity of bus "+oldCapacity);
 	                 
-	            System.out.println("\nPlease enter new type : (Van/Mini/Large) ");
-	            String newType = Menu.USERCHOICE.next();
-	            int newCapacity = bus.getTypeCapacity(newType);
-	            System.out.println("\nnew capacity  is "+newCapacity);
-	                   //if upgrading to larger bus then automatically change
-	            if (newCapacity >= oldCapacity) {
-	            	bus.changeType(busid,newType);
-	                       	
-	                        }
-	           else {
-	                 System.out.println("You are trying to reduce capacity of the route, please add a bus before proceeding.");
-	                               }
-	                        
-	                                                           
-	                }
+	    System.out.println("\nPlease enter new type : (Van/Mini/Large) ");
+	    String newType = Menu.USERCHOICE.next();
+	    int newCapacity = bus.getTypeCapacity(newType);
+	    System.out.println("\nnew capacity  is "+newCapacity);
+	    //if upgrading to larger bus then automatically change
+
+	    if (newCapacity >= oldCapacity) 
+	    {
+	    	bus.changeType(busid,newType);                 	
+	    }
+	    else 
+	    {
+	    	System.out.println("You are trying to reduce capacity of the route, please add a bus before proceeding.");
+	    }                                          
+	}
 
 	public void changeNumberofBussesInRoute() {
 	       

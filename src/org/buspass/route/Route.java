@@ -540,4 +540,18 @@ public int getApplicationId() {
 		
 	}
     
+	//To check if there are any applications against a route usually before removal of route
+	public boolean checkApplications(int routeId) {
+		Connection con=Connections.makeConnection();
+		String query="Select applicationid from buspassapplication where routeid=" + routeId + ";";
+		ResultSet result=Connections.sendQuery(con,query);
+		try {
+			if(result.next())
+				return true;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
 }
