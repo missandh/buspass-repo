@@ -92,7 +92,8 @@ public class Feedback {
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			System.out.println("Apologies! There was a problem submitting your feedback. Please retry.");
+			//e.printStackTrace();
 		}
 	}
 }

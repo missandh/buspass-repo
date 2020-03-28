@@ -26,9 +26,8 @@ public class Menu {
 			catch(Exception e)
 			{
 				System.out.println("Something went wrong. Please recheck the format of the userid and password");
-				e.printStackTrace();
-				System.out.println("Let's retry that in the correct format!");
-				displayMenu();
+				//e.printStackTrace();
+				System.out.println("\n Let's retry that in the correct format!");
 			}
 		 }
 	}
@@ -64,17 +63,17 @@ public class Menu {
 		catch (NumberFormatException nfe) 
 		{
 			System.out.println("Invalid choice, please try again");
-			nfe.printStackTrace();
+			//nfe.printStackTrace();
 		}
 		catch(InputMismatchException ime)
 		{
 			System.out.println("ERROR! Please enter only numeric choices as provided in options.");
-			ime.printStackTrace();
+			//ime.printStackTrace();
 		}
 		catch(Exception e)
 		{
 			System.out.println("Something went wrong. Please retry.");
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 
 		return choice;
@@ -133,7 +132,7 @@ public class Menu {
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		finally
 		{

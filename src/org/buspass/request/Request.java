@@ -64,7 +64,8 @@ public class Request {
 		}
 		catch (SQLException e)
 		{
-			e.printStackTrace();
+			System.out.println("Connectivity issues!");
+			//e.printStackTrace();
 		}
 		Connections.closeConnection();
 		return status;
@@ -113,7 +114,7 @@ public class Request {
 		}		
 	}
 
-	public void requestReactivateBusPass (int userid, int routeid, int scheduleid)
+	public void requestReactivateBusPass (int userid, int routeid, int stopid, int scheduleid)
 	{
 		/* 
 		 * User can request to reactivate the bus pass
@@ -121,7 +122,7 @@ public class Request {
 		 */
 		Route userroute = new Route();
 		
-		String cquery = "update buspassmaster set buspassstatus = \"Active\", routeid="+ routeid+ ", scheduleid="+ scheduleid + " where userid = " + userid +";";
+		String cquery = "update buspassmaster set buspassstatus = \"Active\", routeid="+ routeid+ ", stopid="+ stopid+", scheduleid="+ scheduleid + " where userid = " + userid +";";
 		if(getBusPassStatus(userid).toLowerCase() != "active")
 		{
 			if(userroute.isSeatAvailableOnRoute(routeid,scheduleid))

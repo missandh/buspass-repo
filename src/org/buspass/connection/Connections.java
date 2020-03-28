@@ -31,11 +31,14 @@ public class Connections
 		} 
 		catch (SQLException sqlEx) 
 		{ 
+			System.out.println("There was an error creating the database connection!");
 			sqlEx.printStackTrace(); 
-		} catch(Exception e){
-		      //Handle errors for Class.forName
-		      e.printStackTrace();
-		   }
+		} 
+		catch(Exception e){
+			//Handle errors for Class.forName
+			System.out.println("There was an error during the database connection!");
+		    e.printStackTrace();
+		}
 			return con;
 	}
 			
@@ -49,6 +52,7 @@ public class Connections
 			
 			catch(SQLException sqlEx) 
 			{ 
+				System.out.println("There was an error closing the database connection!");
 				sqlEx.printStackTrace(); 					
 			} 
 		 }

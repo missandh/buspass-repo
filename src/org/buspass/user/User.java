@@ -6,6 +6,7 @@ package org.buspass.user;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 
 import org.buspass.connection.Connections;
@@ -121,7 +122,7 @@ public class User extends Employee{
 		
 		String table = "buspassmaster";
 		ResultSet rset = null;
-
+		
 		String squery = "select b.userid, buspassid, b.routeid, buspassstatus, monthlyamount, u.name, s.stopname, sc.scheduletime from "+ 
 						table +" as b, user as u, stop as s, schedule as sc " + 
 				" where b.userid = u.userid AND b.stopid = s.stopid and b.scheduleid = sc.scheduleid and b.userid = " + userid + ";";
@@ -132,23 +133,30 @@ public class User extends Employee{
 		try 
 		{
 			rset = Connections.sendQuery(dbcon, squery);
-			System.out.println("\n\nHere is the bus pass snapshot for user:  ");
-			
-			while (rset.next())
-			{	 
-                // Let's fetch the data by column numbers
-				
-				System.out.println("\nUser ID: " + rset.getInt(1));
-				System.out.println("\n***************************************");
-				System.out.println("\n\tBus Pass ID :"+rset.getInt(2)+ 
-									"\n\tName: " + rset.getString(6)+
-									"\n\tBus Pass Status: " + rset.getString(4)+ 
-									"\n\tRoute ID: " + rset.getInt(3) + 
-									"\n\tStop Name: " + rset.getString(7)+
-									"\n\tSelected Time Slot: " + rset.getString(8)+
-									"\n\tMonthly Amount: " + rset.getInt(5));
-				System.out.println("\n***************************************");
-
+			if (!rset.next()) 
+			{
+				System.out.println("\t\t*****************************");
+				System.out.println("Sorry you don't have any Active Bus Pass. Please send a request to the Admin to reactivate your bus pass");
+				System.out.println("\t\t*****************************");
+			}
+			else
+			{
+				System.out.println("\n\nHere is the bus pass snapshot for user:  ");
+				do
+				{	 
+		            // Let's fetch the data by column numbers
+						
+					System.out.println("\nUser ID: " + rset.getInt(1));
+					System.out.println("\n***************************************");
+					System.out.println("\n\tBus Pass ID :"+rset.getInt(2)+ 
+										"\n\tName: " + rset.getString(6)+
+										"\n\tBus Pass Status: " + rset.getString(4)+ 
+										"\n\tRoute ID: " + rset.getInt(3) + 
+										"\n\tStop Name: " + rset.getString(7)+
+										"\n\tSelected Time Slot: " + rset.getString(8)+
+										"\n\tMonthly Amount: " + rset.getInt(5));
+					System.out.println("\n***************************************");
+				} while (rset.next());
 			}
 		}
 		catch (SQLException e)
@@ -201,6 +209,7 @@ viewBuspassSnapshot()
     	boolean validIntegerEntered = false;
     	boolean validUserIDEntered = false;
     	int nuserid = -1;
+    	ArrayList<Integer> stops = new ArrayList<Integer>();
 
     	System.out.println("Would you like to : ");
     	System.out.println("\n 1. Cancel Bus Pass \n 2. Re-activate a cancelled bus pass or \n 3. Suspend Bus Pass");
@@ -243,11 +252,14 @@ viewBuspassSnapshot()
     		case 2:
     			System.out.println("Please enter the route id you want to reactivate the bus pass to : ");
     			int routeid = Menu.USERCHOICE.nextInt();
+    			currentroute.getStopsForRoute(routeid);
+    			System.out.println("\n\nPlease select the stop id from above list per your preference: ");
+    			int stopid = Menu.USERCHOICE.nextInt();
     			System.out.println("Please enter the scheduled id for the time you want to reactivate the bus pass to: ");
     			//****add code to get scheduleid from schedule time
     			roaster.viewRouteSchedule(routeid);
     			int scheduleid = Menu.USERCHOICE.nextInt();
-    			newrequest.requestReactivateBusPass(getUserid(), routeid,scheduleid);
+    			newrequest.requestReactivateBusPass(getUserid(), routeid,stopid, scheduleid);
     			break;
     			
     		case 3:

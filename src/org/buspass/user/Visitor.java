@@ -1,5 +1,9 @@
 package org.buspass.user;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+
+import org.buspass.connection.Connections;
 import org.buspass.menu.Menu;
 import org.buspass.route.Route;
 
@@ -48,9 +52,10 @@ public class Visitor extends Employee {
 		Route route = new Route();
 		route.updateApplication(routeid);
 		applicationid = route.getApplicationId();
+		addVisitor(applicationid, name, password, address, phonenumber, emailId);
+
 		System.out.println("Your application id is "+applicationid);
 		System.out.println("Please wait for admin approval");
-		route.visitorToUser(applicationid, name, password, address, phonenumber, emailId);
 	}
 
 	public  void viewOccupancy()
@@ -69,6 +74,45 @@ public class Visitor extends Employee {
 		System.out.println("\nAvailable seats: "+available+" ,Occupied Seats: "+filled);
 		//System.out.println((float)filled/total);
 		percent = (float)filled/total;
-		System.out.println("\n Percentage occupancy = "+percent*100);
+		System.out.println("\n Percentage occupancy = "+ Math.round(percent*100) + "%");
+	}
+	
+	public void addVisitor(int applicationid, String name, String password, String address, int phonenumber, String emailid) {
+	    
+		String query = "insert into visitor (visitorid,applicationid,name,password,address,phonenumber,emailid) values (default,"+applicationid+",\'"+name+"\',\'"+password+"\',\'"+address+"\',"+phonenumber+",\'"+emailid+"\' ) ;";
+	    
+		try {
+	           Connections.sendStatement(query);
+	    }
+	    catch(Exception e) {
+	           e.printStackTrace();
+	    }
+	}
+
+	public int visitorToUser( int applicationid) {
+	    String query = "select name,password,address,phonenumber,emailid from visitor where applicationid = "+applicationid;
+	    Connection con = Connections.makeConnection();
+	    String name = null,password=null,address=null,emailid=null;
+	    int phonenumber=0,userid=0;
+	    try {
+	           ResultSet rs = Connections.sendQuery(con,query);
+	           while(rs.next()) {
+	                 name = rs.getString("name");
+	                   password = rs.getString("password");
+	                 address = rs.getString("address");
+	           phonenumber = rs.getInt("phonenumber");
+	                 emailid = rs.getString("emailid");
+	           }
+	           String query1 = "insert into user (userid,password,name,address,phonenumber,emailid,isAdmin) values (default,\'"+password+"\',\'"+name+"\',\'"+address+"\',"+phonenumber+",\'"+emailid+"\',false)";
+	           Connections.sendStatement(query1);
+	           String query2 = "select max(userid) from user;";
+	           ResultSet rs1 = Connections.sendQuery(con, query2);
+	           while(rs1.next()) {
+	                 userid = rs1.getInt("max(userid)"); 
+	           }      
+	    }catch(Exception e) {
+	           e.printStackTrace();
+	    }
+	    return userid;
 	}
 }

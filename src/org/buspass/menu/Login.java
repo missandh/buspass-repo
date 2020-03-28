@@ -23,17 +23,17 @@ public class Login {
 		catch(NullPointerException ne)
 		{
 			System.out.println("Employee object not returned");
-			ne.printStackTrace();
+			//ne.printStackTrace();
 		}
 		catch(NumberFormatException nfe)
 		{
 			System.out.println("Input fields format is incorrect");
-			nfe.printStackTrace();
+			//nfe.printStackTrace();
 		}
 		catch (Exception e) 
 		{
 			System.out.println("Something went wrong during login.");
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 			return objuser;
 

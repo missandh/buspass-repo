@@ -8,9 +8,9 @@ public class VisitorHandler
 	
 	private void displayVisitorHeader() 
 	{
-		System.out.println("\n|---------------------|");
+		System.out.println("\n|---------------------------|");
 		System.out.println(" 	Welcome Visitor");
-		System.out.println("|----------------------|\n");
+		System.out.println("|---------------------------|\n");
 	}
 	
 	public void displayVisitorMenu() 
@@ -63,8 +63,7 @@ public class VisitorHandler
                 
            case 0:
              	 exit=true; //goback to previous menu
-                 break;
-              
+             	 return;              
         }
     }
 }

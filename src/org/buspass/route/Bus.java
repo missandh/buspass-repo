@@ -2,8 +2,10 @@ package org.buspass.route;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import org.buspass.connection.Connections;
+import org.buspass.user.Visitor;
 
 public class Bus 
 {
@@ -11,7 +13,9 @@ public class Bus
 	public int capacity =0, availableSeats=0;
 	
 	////method to see the count of vehicles of each type
-	public  void viewTypeCount() {
+	
+	public  void viewTypeCount() 
+	{
 		Connection con = Connections.makeConnection();
 		String query = "select count(busid) as Count, bustype from bus group by bustype";
 		try {
@@ -22,29 +26,40 @@ public class Bus
 				System.out.println(i + " " + s );
 			}
 				Connections.closeConnection();
-			}catch(Exception e) {
-				e.printStackTrace();
 			}
+		catch(SQLException sqe) 
+		{
+			System.out.println("Connectivity Issues! Please retry");
+			sqe.printStackTrace();
+		}
 	}
 
 
 //@overloaded
 //method to see the count of vehicles of each type based on routeId
-public void viewTypeCount(int routeid) {
-	//TODO Print specific route
+public void viewTypeCount(int routeid) 
+{
 	Connection con = Connections.makeConnection();
 	String query = "select count(busid) as Count, bustype from bus where routeid= "+ routeid +" group by bustype;";
-	try {
+	try 
+	{
 		ResultSet rs = Connections.sendQuery(con, query);
 		while(rs.next()) {
 			String i = rs.getString("bustype");
 			int s = rs.getInt("Count");
 			System.out.println(i + " " + s );
-		}
+	}
 		Connections.closeConnection();
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
+	}
+	catch(SQLException sqe) 
+	{
+		System.out.println("Connectivity Issues! Please retry");
+		sqe.printStackTrace();
+	}
+	catch(Exception e) 
+	{
+		System.out.println("Something went wrong");
+	}
 }
 
 //method to return capacity of bus based on busid
@@ -123,22 +138,27 @@ public  int  getapplicationdetails(int id) {
 }
 
 //metod to vlidate buspass
-public  void validateBusPassApplication(int routeid,int applicationid) {
-    String query = "update buspassapplication set approvalstatus = 'Approved' where applicationid = "+applicationid;
+public  void validateBusPassApplication(int routeid,int applicationid) 
+{
+	Visitor appliedvisitor = new Visitor();
+	String query = "update buspassapplication set approvalstatus = 'Approved' where applicationid = "+applicationid;
     try {
            Route route=new Route();
            int available = route.availableCapacity(routeid);
            int filled = route.filledCapacityInRoute(routeid);
            
            if(available > filled) {
-        	   	  System.out.println("Good News there are seats available on this route.");
-                  System.out.println("\nThe Bus Pass application is approved for applicant with application id: "+ applicationid +". Login credentials will be shared soon");
-                  Connections.sendStatement(query);
+        	   	System.out.println("Good News there are seats available on this route.");
+                System.out.println("\nThe Bus Pass application is approved for applicant with application id: "+ applicationid +". Login credentials will be shared soon");
+                Connections.sendStatement(query);
+                appliedvisitor.visitorToUser(applicationid);
            }
            else
                   System.out.println("\nService in the route cannot be provided as of now.. Come back later");
-    }catch(Exception e) {
-           e.printStackTrace();
+    }
+    catch(Exception e) 
+    {
+        e.printStackTrace();
     }
 }
 

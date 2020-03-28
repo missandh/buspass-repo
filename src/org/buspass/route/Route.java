@@ -51,9 +51,9 @@ public class Route {
 				//filled = filledcapacity;
 				//System.out.println(filled);
 			}
-			
 			Connections.closeConnection();
-		}catch(Exception e) {
+		}
+		catch(Exception e) {
 			e.printStackTrace();
 		}
 		return filled;
@@ -187,22 +187,19 @@ try {
 }
 
 
-
-
 public void removeBusFromRoute(int routeid,int busid) {
 
- String query = "update bus set routeid = null where busid = "+busid+" ;";
- System.out.println("\nBus "+busid + " removed from route "+ routeid);
+	String query = "update bus set routeid = null where busid = "+busid+" ;";
+	System.out.println("\nBus "+busid + " removed from route "+ routeid);
 
-try {
-  Connections.sendStatement(query);  
- //System.out.println("removed bus in route "+ routeid);
-Connections.closeConnection();
-}catch(Exception e){
- //Handle errors for Class.forName
- e.printStackTrace();
-}        
-       
+	try {
+		Connections.sendStatement(query);  
+		//System.out.println("removed bus in route "+ routeid);
+	}
+	catch(Exception e){
+		//Handle errors for Class.forName
+		e.printStackTrace();
+	}          
 }
 
 public int availableCapacity(int routeid) {
@@ -233,44 +230,6 @@ public void updateApplication(int routeid) {
     }
 }
 
-public void visitorToUser(int applicationid, String name, String password, String address, int phonenumber, String emailid) {
-    String query = "insert into visitor (visitorid,applicationid,name,password,address,phonenumber,emailid) values (default,"+applicationid+",\'"+name+"\',\'"+password+"\',\'"+address+"\',"+phonenumber+",\'"+emailid+"\' ) ;";
-    try {
-           Connections.sendStatement(query);
-    }catch(Exception e) {
-           e.printStackTrace();
-    }
-    
-    
-    
-}
-
-public static int visitorToUser( int applicationid) {
-    String query = "select name,password,address,phonenumber,emailid from visitor where applicationid = "+applicationid;
-    Connection con = Connections.makeConnection();
-    String name = null,password=null,address=null,emailid=null;
-    int phonenumber=0,userid=0;
-    try {
-           ResultSet rs = Connections.sendQuery(con,query);
-           while(rs.next()) {
-                 name = rs.getString("name");
-                   password = rs.getString("password");
-                 address = rs.getString("address");
-           phonenumber = rs.getInt("phonenumber");
-                 emailid = rs.getString("emailid");
-           }
-           String query1 = "insert into user (userid,password,name,address,phonenumber,emailid,isAdmin) values (default,\'"+password+"\',\'"+name+"\',\'"+address+"\',"+phonenumber+",\'"+emailid+"\',false)";
-           Connections.sendStatement(query1);
-           String query2 = "select max(userid) from user;";
-           ResultSet rs1 = Connections.sendQuery(con, query2);
-           while(rs1.next()) {
-                 userid = rs1.getInt("max(userid)"); 
-           }      
-    }catch(Exception e) {
-           e.printStackTrace();
-    }
-    return userid;
-}
 
 public int getApplicationId() {
     int aid = 0;
@@ -493,9 +452,9 @@ public int getApplicationId() {
 			for(int i=0; i<totalstops; i++)
 			{
 				if(i!=totalstops-1)
-					System.out.print(allstops.get(i).getStopname() + " -----> " );
+					System.out.print(allstops.get(i).getStopname() + " ( Stop ID: " + allstops.get(i).getStopid() +") -----> " );
 				else
-					System.out.print(allstops.get(i).getStopname());
+					System.out.print(allstops.get(i).getStopname() + " ( Stop ID: " + allstops.get(i).getStopid() +")");
 			}
 			
 		}
