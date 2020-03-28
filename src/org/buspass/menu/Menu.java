@@ -57,29 +57,23 @@ public class Menu {
 		
 		try 
 		{
-			System.out.print("\nEnter your choice");
+			System.out.print("\nEnter your choice: ");
 
 			choice = Integer.parseInt(USERCHOICE.nextLine());
 		} 
 		catch (NumberFormatException nfe) 
 		{
 			System.out.println("Invalid choice, please try again");
-			if(USERCHOICE.hasNext())
-				USERCHOICE.nextLine();
 			nfe.printStackTrace();
 		}
 		catch(InputMismatchException ime)
 		{
 			System.out.println("ERROR! Please enter only numeric choices as provided in options.");
-			if(USERCHOICE.hasNext())
-				USERCHOICE.nextLine();
 			ime.printStackTrace();
 		}
 		catch(Exception e)
 		{
 			System.out.println("Something went wrong. Please retry.");
-			if(USERCHOICE.hasNext())
-				USERCHOICE.nextLine();
 			e.printStackTrace();
 		}
 
