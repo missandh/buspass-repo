@@ -68,17 +68,16 @@ public class UserHandler
 		System.out.println("|-----------------|");
 	}
 	
-	public void displayUserOptions() {
+	public void displayUserOptions() 
+	{
 		System.out.println("\nPlease select an option to continue");
 		
 		System.out.println("1. View all the routes, their stops, type of vehicles, no of vehicles on each route");
-		System.out.println("2. Request cancel or Reactivate or Cancel Bus Pass");
+		System.out.println("2. Request Cancel or Reactivate or Suspend Bus Pass");
 		System.out.println("3. Give feedback on the Bus Pass Maintenance System");
 		System.out.println("4. View and Update your contact details");
 		System.out.println("5. Get Bus Pass Snapshot");
-		System.out.println("6. Logout");
-
-		//System.out.println("9. Exit menu");
+		System.out.println("0. Logout");
 	}
 	
 	private void executeChoice(int choice) {
@@ -91,7 +90,7 @@ public class UserHandler
 			break;
 			
 		case 2:
-			System.out.println("\n*******Request cancel or Reactivate or Cancel Bus Pass*******\n");
+			System.out.println("\n*******Request Cancel or Reactivate or Suspend Bus Pass*******\n");
 			bususer.requestAlterBusPass();
 			break;
 			
@@ -110,7 +109,7 @@ public class UserHandler
 			bususer.viewBuspassSnapshot(bususer.getUserid());
 			break;
 			
-		case 6:
+		case 0:
 			System.out.println("\n*******Logging you out********\n");
 			System.out.println("Bye Bye. Thanks for using Amazon Transport System.");
 			loggedout= bususer.logout();
