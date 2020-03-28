@@ -6,8 +6,6 @@ import org.buspass.user.*;
 
 public class Login {
 	
-	Admin busadmin;
-	User bususer;
 	Employee aduser;
 	
 	public Employee askLogin() {
@@ -74,5 +72,10 @@ public class Login {
 		return aduser;
 	}
 	
+	public Employee grantVisitorEntry()
+	{
+		aduser = new Visitor(0,"visitor");
+		return aduser;
+	}
 
 }

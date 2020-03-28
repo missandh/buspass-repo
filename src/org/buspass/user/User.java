@@ -187,12 +187,12 @@ viewBuspassSnapshot()
 (Tentative)3. Request to change to another route -> check if new route has capacity, and change, else prompt change is not possible. (auto approved)
  */
     
-    public void viewAllDetails()
-    {
-    	System.out.println("Here are all the routes that currently are served: ");
-    	currentroute.viewAllRoutesWithStops();
-    	currentroute.viewTypeOfVehiclesPerRoute();
-    }
+//    public void viewAllDetails()
+//    {
+//    	System.out.println("Here are all the routes that currently are served: ");
+//    	currentroute.viewAllRoutesWithStops();
+//    	currentroute.viewTypeOfVehiclesPerRoute();
+//    }
 	
     public void requestAlterBusPass()
     {

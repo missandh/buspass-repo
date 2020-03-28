@@ -4,6 +4,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import org.buspass.user.UserHandler;
+import org.buspass.user.VisitorHandler;
 import org.buspass.user.AdminHandler;
 import org.buspass.user.Employee;
 
@@ -87,31 +88,31 @@ public class Menu {
 
 	private void executeChoice(int choice) throws Exception {
 		Login login = new Login();
-		Employee newemp = login.askLogin();
-		if (newemp != null)
-		{
+		Employee newemp;
+		//if (newemp != null){
 			switch (choice) {
 			case 1:
 				// Admin after validation call the User handler
-				  if(newemp.usertype.equals("admin")) 	//after validation call the Admin handler
-					  new AdminHandler(newemp.userid).displayAdminMenu();
-				  else
-					  System.out.println("Invalid credentials\n\n");		  					  
-				  break;
+				newemp = login.askLogin();
+				if(newemp.usertype.equals("admin")) 	//after validation call the Admin handler
+					new AdminHandler(newemp.userid).displayAdminMenu();
+				else
+					System.out.println("Invalid credentials\n\n");		  					  
+			break;
 				 
 			case 2:
 				// User after validation call the User handler
-				
-				 if(newemp.usertype.equals("user"))
+				newemp = login.askLogin();
+				if(newemp.usertype.equals("user"))
 					new UserHandler(newemp.userid).displayUserMenu();
-				 else			 
-					 System.out.println("Invalid credentials, Please try again"); 
-				  break;
+				else			 
+					System.out.println("Invalid credentials, Please try again"); 
+			break;
 	
 			case 3:
-				// visitor
-				System.out.println("welcome to visitor");
-				//VisitorHandler visitor = new VisitorHandler();
+				 //usertype is visitor here
+				newemp = login.grantVisitorEntry();
+				new VisitorHandler().displayVisitorMenu();
 				//visitor.displayVisitorMenu();
 				break;
 	
@@ -124,9 +125,9 @@ public class Menu {
 				System.out.println("Unable to make selection, Please try again");
 				break;
 			}
-		}//end if
-		else
-			System.out.println("Unable to login");
+		//}//end if
+		//else
+			//System.out.println("Unable to login");
 	}
 	
 	public static void main(String[] args)
