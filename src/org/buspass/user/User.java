@@ -294,7 +294,7 @@ viewBuspassSnapshot()
     	String fbacktype="";
     	String fbackdetails= "";
     	System.out.print("Please provide the type of feedback you want to give.\n");
-    	System.out.print("Enter :\n1 --- for Appreciation \n2 --- for Suggestion \n3 --- for Complain  \n4 --- for Other: \n");
+    	System.out.print("Enter :\n1 --- for Appreciation \n2 --- for Suggestion \n3 --- for Complaint  \n4 --- for Other: \n");
     	try 
     	{
     		fbackchoice = Menu.USERCHOICE.nextInt();
@@ -322,7 +322,7 @@ viewBuspassSnapshot()
     			fbacktype = "Suggestion";
     			break;
     		case 3: 
-    			fbacktype = "Complain";
+    			fbacktype = "Complaint";
     			break;
     		default:
     			fbacktype = "Other";
