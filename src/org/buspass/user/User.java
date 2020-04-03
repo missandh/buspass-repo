@@ -352,19 +352,19 @@ viewBuspassSnapshot()
 			{
 				System.out.println("Thanks for confirming userid.");
 				System.out.println("\nHere are the current details:  ");
+				while (rset.next())
+				{	 
+	                // Let's fetch the data by column numbers				
+					System.out.println("User ID: " + rset.getInt(1));
+					System.out.println("User Name: " + rset.getString(2));
+					System.out.println("Address: " + rset.getString(3));
+					System.out.println("Phone Number: " + rset.getLong(4));
+					System.out.println("Email ID : " + rset.getString(5));
+				}
 			}
 			else
 			{
 				System.out.println("User ID mismatched! Logging out");
-			}
-			while (rset.next())
-			{	 
-                // Let's fetch the data by column numbers				
-				System.out.println("User ID: " + rset.getInt(1));
-				System.out.println("User Name: " + rset.getString(2));
-				System.out.println("Address: " + rset.getString(3));
-				System.out.println("Phone Number: " + rset.getLong(4));
-				System.out.println("Email ID : " + rset.getString(5));
 			}
 		}
 		catch (SQLException se)
